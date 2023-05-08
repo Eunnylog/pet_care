@@ -1,3 +1,9 @@
 from django.db import models
 
-# Create your models here.
+class PetOwnerReview(models.Model):
+    comment = models.TextField()
+    star = models.IntegerField()
+
+class PetSitterReview(models.Model):
+    comment = models.TextField()
+    star = models.IntegerField()
