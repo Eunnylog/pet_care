@@ -6,7 +6,7 @@ class PetOwner(models.Model):
     writer=models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     content = models.TextField()
-    charge = models.IntegerField(max_length=20)
+    charge = models.IntegerField()
     species_ = (
         ("cat", "고양이"),
         ("dog", "강아지"),
