@@ -1,14 +1,12 @@
 from django.db import models
-from django.contrib.gis.db import models
-# from users.models import User
+from users.models import User
 
 
 # Create your models here.
 class PetOwner(models.Model):
-    # writer=models.ForeignKey(User, on_delete=models.CASCADE)
+    writer=models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     content = models.TextField()
-    location = models.PointField()
     charge = models.IntegerField(max_length=20)
     species_ = (
         ("cat", "고양이"),
@@ -22,4 +20,3 @@ class PetOwner(models.Model):
         ("etc", "기타"),
     )
     species = models.CharField("종", max_length=20, choices=species_)
-    photo = models.ImageField(null=True, blank=True)
