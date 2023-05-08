@@ -1,5 +1,5 @@
 from django.db import models
-# from users.models import User
+from users.models import User
 
 class PetSitter(models.Model):
     title = models.CharField(max_length=20) #제목
