@@ -18,4 +18,9 @@ class PetOwnerCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetOwnerComment
         fields = "__all__"
+
+class PetOwnerCommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PetOwnerComment
+        fields = ("content",)
         

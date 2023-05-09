@@ -39,8 +39,6 @@ class PetOwner(CommonModel):
         return self.reservation_end - self.reservation_start
 
 
-
-
 class PetOwnerComment(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
