@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from owners.models import OwnerComment, PetOwner
-from datetime import timedelta
+
 
 
 class PetOwnerSerializer(serializers.ModelSerializer):
