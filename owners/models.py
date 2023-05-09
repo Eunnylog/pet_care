@@ -26,7 +26,6 @@ class PetOwner(models.Model):
     species = models.CharField("종", max_length=20, choices=species_)
     is_reserved = models.CharField("진행 상태", max_length=20, choices=reservation_status, default="0") # 기본값을 0으로 주겠습니다
     photo = models.ImageField("이미지", blank=True)
-
     
     def __str__(self):
         return str(self.title)
