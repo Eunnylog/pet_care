@@ -26,10 +26,10 @@ class PetSitter(models.Model):
         return self.title
 
 
-class SitterComment(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # pr? = models.ForeignKey(PR?, on_delete=models.CASCADE)
-    # updated_at 처리는 어떻게?
+class PetSitterComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    PetSitter = models.ForeignKey(PetSitter, on_delete=models.CASCADE)
+    # updated_at user에서 상속받아오기
     content = models.TextField()
 
     def __str__(self):

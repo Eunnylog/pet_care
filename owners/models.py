@@ -21,10 +21,10 @@ class PetOwner(models.Model):
     species = models.CharField("종", max_length=20, choices=species_)
 
 
-class OwnerComment(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # pr? = models.ForeignKey(PR?, on_delete=models.CASCADE)
-    # updated_at 처리는 어떻게?
+class PetOwnerComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    PetOwner = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
+    # updated_at user에서 상속받아오기
     content = models.TextField()
 
     def __str__(self):
