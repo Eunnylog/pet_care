@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class UserManager(BaseUserManager):
@@ -70,9 +71,13 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 class PetOwnerReview(models.Model):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE,related_name='myownerreviews')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'ownerreviews')
     comment = models.TextField()
-    star = models.IntegerField()
+    star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
 
 class PetSitterReview(models.Model):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE,related_name='mysitterreviews')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'sitterreviews')
     comment = models.TextField()
-    star = models.IntegerField()
+    star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
