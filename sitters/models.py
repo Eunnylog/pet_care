@@ -9,5 +9,3 @@ class SitterComment(models.Model):
 
     def __str__(self):
         return str(self.content)
-
-# 안녕하세요
