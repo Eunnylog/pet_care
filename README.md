@@ -3,7 +3,7 @@
 
 <dir>
 기본 유저 만들기
-1-1.CreateSuperuser 먼저할것 혹은 
+1-1.CreateSuperuser 먼저할것 혹은 \n
 1-1.log up first account에서 회원가입하기
 
 사용유저 만들기
