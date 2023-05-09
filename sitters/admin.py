@@ -1,3 +1,5 @@
 from django.contrib import admin
+from owners.models import PetSitter, PetSitterComment
 
-# Register your models here.
+admin.site.register(PetSitter)
+admin.site.register(PetSitterComment)

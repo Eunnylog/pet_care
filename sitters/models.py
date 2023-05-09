@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User
+from users.models import User, CommonModel
 
 class PetSitter(models.Model):
     writer=models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,10 +26,9 @@ class PetSitter(models.Model):
         return self.title
 
 
-class PetSitterComment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    PetSitter = models.ForeignKey(PetSitter, on_delete=models.CASCADE)
-    # updated_at user에서 상속받아오기
+class PetSitterComment(CommonModel):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    sitter = models.ForeignKey(PetSitter, on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):
