@@ -14,6 +14,7 @@ class PetOwnerView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request):
+        """게시글 작성하기"""
         serializer = PetOwnerCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(writer=request.user)
@@ -33,12 +34,25 @@ class PetOwnerDetailView(APIView):
     
     def put(self, request, owner_id):
         """게시글 수정"""
-        pass
+        owner_post = PetOwner.objects.get(id=owner_id)
+        if request.user == owner_post.writer:  # 본인이 작성한 게시글이 맞다면
+            serializer = PetOwnerCreateSerializer(owner_post, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:   # 본인의 게시글이 아니라면
+            return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
     
     def delete(self, request, owner_id):
         """게시글 삭제"""
-        pass
-
+        owner_post = PetOwner.objects.get(id=owner_id)
+        if request.user == owner_post.writer:  # 본인이 작성한 게시글이 맞다면
+            owner_post.delete() 
+            return Response({'message':'게시글이 삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
+        else:   # 본인의 게시글이 아니라면
+            return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
 '''
 # owner_id가 맞나? user/writer랑 헷갈린다
 class PetOwnerCommentView(APIView):
