@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404
 from rest_framework import status, permissions
 from rest_framework.response import Response
-from users.serializers import UserSerializer, PetOwnerReviewCreateSerializer, PetSitterReviewCreateSerializer,PetOwnerReviewSerializer,PetSitterReviewSerializer
+from users.serializers import UserSerializer,UserUpdateSerializer, PetOwnerReviewCreateSerializer, PetSitterReviewCreateSerializer,PetOwnerReviewSerializer,PetSitterReviewSerializer
 from users.models import PetOwnerReview, PetSitterReview, User
 
 
@@ -27,7 +27,7 @@ class UserView(APIView):
     #업데이트
     def put(self,request):
         user = get_object_or_404(User,id=request.user.id)
-        serializer = UserSerializer(user,data=request.data)
+        serializer = UserUpdateSerializer(user,data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"message":"수정완료!"}, status=status.HTTP_201_CREATED)
