@@ -1,7 +1,8 @@
 from django.db import models
 from users.models import User, CommonModel
 
-class PetSitter(models.Model):
+
+class PetSitter(CommonModel):
     writer=models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=20) #제목
     content = models.TextField(null=True) # 내용
