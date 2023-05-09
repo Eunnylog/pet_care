@@ -22,7 +22,7 @@ class PetOwner(CommonModel):
     writer=models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField("제목",max_length=20)
     content = models.TextField("내용")
-    charge = models.IntegerField("요금")
+    charge = models.PositiveIntegerField("요금")
     species = models.CharField("종", max_length=20, choices=species_)
     is_reserved = models.CharField("진행상태", max_length=20, choices=reservation_status, default="0") # 기본값을 0으로 주겠습니다
     photo = models.ImageField("이미지", blank=True)
