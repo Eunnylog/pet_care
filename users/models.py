@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class CommonModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -77,9 +78,13 @@ class User(AbstractBaseUser):
 
 
 class PetOwnerReview(models.Model):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE,related_name='myownerreviews')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'ownerreviews')
     comment = models.TextField()
-    star = models.IntegerField()
+    star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
 
 class PetSitterReview(models.Model):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE,related_name='mysitterreviews')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'sitterreviews')
     comment = models.TextField()
-    star = models.IntegerField()
+    star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
