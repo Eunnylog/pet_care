@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from owners.models import PetOwner, PetOwnerComment
+from owners.models import OwnerComment, PetOwner
+from datetime import timedelta
 
 
 class PetOwnerSerializer(serializers.ModelSerializer):
@@ -13,9 +14,9 @@ class PetOwnerCreateSerializer(serializers.ModelSerializer):
         model = PetOwner
         fields = ("title","content", "charge","species","reservation_start", "reservation_end")
 
-
-class PetOwnerCommentSerializer(serializers.ModelSerializer):
+    
+    
+class OwnerCommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PetOwnerComment
+        model = OwnerComment
         fields = "__all__"
-        
