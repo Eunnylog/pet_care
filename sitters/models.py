@@ -1,5 +1,6 @@
 from django.db import models
-from users.models import CommonModel, User
+from users.models import User, CommonModel
+
 
 class PetSitter(CommonModel):
     writer=models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,13 +27,10 @@ class PetSitter(CommonModel):
         return self.title
 
 
-class SitterComment(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # pr? = models.ForeignKey(PR?, on_delete=models.CASCADE)
-    # updated_at 처리는 어떻게?
+class PetSitterComment(CommonModel):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    sitter_post = models.ForeignKey(PetSitter, on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):
         return str(self.content)
-
-# 안녕하세요
