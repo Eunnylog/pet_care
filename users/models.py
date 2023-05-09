@@ -39,7 +39,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    username=models.CharField(max_length=50,unique=True,editable=False)
+    username=models.CharField(max_length=50,unique=True)
     nick_name=models.CharField(max_length=50,unique=True)
     email = models.EmailField(
         verbose_name="email address",
