@@ -3,8 +3,8 @@ from owners.models import PetOwner, PetOwnerComment
 
 
 class PetOwnerDisplay(admin.ModelAdmin):
-    list_display = ('writer','title','content','charge','species','is_reserved','photo','reservation_start','reservation_end','created_at','updated_at')
-    fields =('writer','title','content','charge','species','is_reserved','photo','reservation_start','reservation_end','created_at','updated_at')
+    list_display = ('writer','title','content','charge','species','is_reserved','photo','reservation_start','reservation_end','created_at','updated_at','reservation_period')
+    fields =('writer','title','content','charge','species','is_reserved','photo','reservation_start','reservation_end','created_at','updated_at','reservation_period')
     readonly_fields = ('created_at','updated_at')
     
 

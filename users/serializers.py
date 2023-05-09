@@ -7,10 +7,10 @@ class PetOwnerReviewCreateSerializer(serializers.ModelSerializer):
         fields = ('content','star',)
 
 class PetOwnerReviewSerializer(serializers.ModelSerializer):
-    writer = serializers.SerializerMethodField()
+    petowner_set = serializers.SerializerMethodField()
 
-    def get_writer(self, obj):
-        return obj.writer.username
+    def get_petowner_set(self, obj):
+        return obj.petowner_set.username
 
     class Meta:
         model = PetOwnerReview

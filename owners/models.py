@@ -1,5 +1,7 @@
+from datetime import timedelta
 from django.db import models
 from users.models import User, CommonModel
+from django.core.exceptions import ValidationError
 
 
 class PetOwner(CommonModel):
@@ -28,15 +30,19 @@ class PetOwner(CommonModel):
     photo = models.ImageField("이미지", blank=True)
     reservation_start = models.DateField("예약시작일")
     reservation_end = models.DateField("예약종료일")
-    # reservation_data = models.DurationField("예약기간") # 있어야하나?
+    reservation_period = models.DurationField("예약기간")
     
     
     def __str__(self):
         return str(self.title)
     
     # 예약 기간
-    def reservation(self):
-        return self.reservation_end - self.reservation_start
+    def save(self, **kwargs):
+        if self.reservation_end < self.reservation_start:
+            raise ValidationError('예약 종료일이 예약 시작일보다 이전일 수 없습니다.')
+        else:    
+            self.reservation_period = (self.reservation_end - self.reservation_start) + timedelta(days=1)
+            super(PetOwner, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
 
 
 
