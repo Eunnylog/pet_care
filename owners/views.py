@@ -1,8 +1,9 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from owners.models import PetOwner
-from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer
+from owners.models import PetOwner, PetOwnerComment
+from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, PetOwnerCommentSerializer
 
 
 # 게시글 목록과 작성
@@ -39,18 +40,22 @@ class PetOwnerDetailView(APIView):
         """게시글 삭제"""
         pass
 
-'''
-# owner_id가 맞나? user/writer랑 헷갈린다
+
+"""
+owner_id가 맞나? user/writer랑 헷갈린다
+PetOwnerCommentSerializer 변형한 PetOwnerCommentCreateSerializer 만들어야할지 (js연결할때 확인을 해야하나?)
+Postman으로 테스트시 Header에 적어놔야함
+"""
 class PetOwnerCommentView(APIView):
     def get(self, request, owner_id):
-        # 댓글 요청 함수
+        """댓글 요청 함수"""
         owner = PetOwner.objects.get(id=owner_id)
-        comments = owner.owner_set.all()
+        comments = owner.owner_set.all() # 여기 _post 넣어야할듯?
         serializer = PetOwnerCommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, owner_id):
-        # 댓글 작성 함수
+        """댓글 작성 함수"""
         serializer = PetOwnerCommentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user, owner_id=owner_id)
@@ -58,8 +63,8 @@ class PetOwnerCommentView(APIView):
 
 
 class PetOwnerCommentDetailView(APIView):
-    def put(self, request, owner_id, comment_id):
-        # 댓글 수정 함수
+    def put(self, request, comment_id):
+        """댓글 수정 함수"""
         comment = get_object_or_404(PetOwnerComment, id=comment_id)
         if request.user == comment.user:
             serializer = PetOwnerCommentSerializer(comment, data=request.data)
@@ -71,15 +76,11 @@ class PetOwnerCommentDetailView(APIView):
         else:
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
 
-    def delete(self, request, owner_id, comment_id):
-        # 댓글 삭제 함수
+    def delete(self, request, comment_id):
+        """댓글 삭제 함수"""
         comment = get_object_or_404(PetOwnerComment, id=comment_id)
         if request.user == comment.user:
             comment.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
-
-# PetOwnerCommentSerializer 변형한 PetOwnerCommentCreateSerializer 만들어야할지 (js연결할때 확인을 해야하나?)
-# Postman으로 테스트시 Header에 적어놔야함
-'''
