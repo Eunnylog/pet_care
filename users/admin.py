@@ -81,11 +81,23 @@ class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
     filter_horizontal = []
 
+class PetOwnerReviewDisplay(admin.ModelAdmin):
+    list_display = ('writer','owner','comment','star','created_at','update_at')
+    fields =('writer','owner','comment','star','created_at','update_at')
+    readonly_fields = ('created_at','update_at')
+
+
+class PetSitterReviewDisplay(admin.ModelAdmin):
+    list_display = ('writer','sitter','comment','star','created_at','update_at')
+    fields =('writer','sitter','comment','star','created_at','update_at')
+    readonly_fields = ('created_at','update_at')
+
+
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
-admin.site.register(PetOwnerReview)
-admin.site.register(PetSitterReview)
+admin.site.register(PetOwnerReview, PetOwnerReviewDisplay)
+admin.site.register(PetSitterReview, PetSitterReviewDisplay)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
