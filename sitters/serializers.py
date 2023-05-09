@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from sitters.models import SitterComment
+from sitters.models import PetSitterComment
 
-class SitterCommentSerializer(serializers.ModelSerializer):
+
+class PetSitterCommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SitterComment
+        model = PetSitterComment
         fields = "__all__"
+        
