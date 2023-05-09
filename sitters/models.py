@@ -1,12 +1,13 @@
 from django.db import models
-from users.models import CommonModel, User
+from users.models import User, CommonModel
+
 
 class PetSitter(CommonModel):
     writer=models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=20) #제목
     content = models.TextField(null=True) # 내용
     # location = models.PointField(blank=False, null=False) # 지역
-    charge = models.IntegerField() # 요금
+    charge = models.PositiveIntegerField() # 요금
     species = (
         ('dog', '강아지'),
         ('cat', '고양이'),
@@ -26,13 +27,10 @@ class PetSitter(CommonModel):
         return self.title
 
 
-class SitterComment(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # pr? = models.ForeignKey(PR?, on_delete=models.CASCADE)
-    # updated_at 처리는 어떻게?
+class PetSitterComment(CommonModel):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    sitter_post = models.ForeignKey(PetSitter, on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):
         return str(self.content)
-
-# 안녕하세요

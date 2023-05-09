@@ -25,6 +25,7 @@ urlpatterns = [
     path('user/',include("users.urls")),
     path('owner/',include("owners.urls")),
     path('sitter/',include("sitters.urls")),
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
