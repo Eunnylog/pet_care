@@ -88,7 +88,7 @@ class PetOwnerReviewDisplay(admin.ModelAdmin):
 
 
 class PetSitterReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','sitter','comment','star','created_at','update_at')
+    list_display = ('writer','sitter','comment','star','created_at','updated_at')
     fields =('writer','sitter','comment','star','created_at','updated_at')
     readonly_fields = ('created_at','updated_at')
 
