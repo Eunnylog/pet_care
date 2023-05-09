@@ -3,5 +3,6 @@ from owners import views
 
 
 urlpatterns = [
-    path('', views.PetOwnerView.as_view(), name='PetOwner_View')
+    path('', views.PetOwnerView.as_view(), name='petowner_view'),
+    path('<int:owner_id>/', views.PetOwnerDetailView.as_view(), name='petowner_detail_View'),
 ]
