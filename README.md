@@ -12,6 +12,8 @@
 4.change info<br/> 
 5.del user<br/> 
 
+
+
 <br/> 
 마지막 작업시 해야되는것: users.model의 user.nickname에unique값 지정하기
 </dir>
