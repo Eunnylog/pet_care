@@ -37,7 +37,7 @@ class PetOwner(CommonModel):
     # 예약 기간
     def save(self, **kwargs):
         self.reservation_period = self.reservation_end - self.reservation_start
-        super(PetOwner, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스
+        super(PetOwner, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
 
 
 

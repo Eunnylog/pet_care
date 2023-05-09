@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from owners.models import OwnerComment, PetOwner
+from owners.models import PetOwnerComment, PetOwner
 
 
 
@@ -18,5 +18,5 @@ class PetOwnerCreateSerializer(serializers.ModelSerializer):
     
 class OwnerCommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OwnerComment
+        model = PetOwnerComment
         fields = "__all__"
