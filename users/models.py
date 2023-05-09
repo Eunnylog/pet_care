@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
+class CommonModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
 
 class UserManager(BaseUserManager):
     def create_user(self, username,email, password=None):
@@ -36,7 +39,8 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    username=models.CharField(max_length=50,unique=True)
+    username=models.CharField(max_length=50,unique=True,editable=False)
+    nick_name=models.CharField(max_length=50,unique=True)
     email = models.EmailField(
         verbose_name="email address",
         max_length=255,
@@ -44,7 +48,7 @@ class User(AbstractBaseUser):
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-
+    date_joined = models.DateTimeField(auto_now=True)
     objects = UserManager()
 
     USERNAME_FIELD = "username"
@@ -68,6 +72,9 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+
 
 class PetOwnerReview(models.Model):
     comment = models.TextField()
