@@ -14,12 +14,13 @@ class PetOwnerView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request):
+        """게시글 작성하기"""
         serializer = PetOwnerCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(writer=request.user)
-            return Response({'message':'게시글 작성되었습니다.'}, serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({'message':'잘못된 입력 값입니다.'}, serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     
 
@@ -38,9 +39,9 @@ class PetOwnerDetailView(APIView):
             serializer = PetOwnerCreateSerializer(owner_post, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response({'message':'게시글이 수정 되었습니다.'}, serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response({'message':'잘못된 입력 값입니다.'}, serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:   # 본인의 게시글이 아니라면
             return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
     

@@ -4,6 +4,11 @@ from owners.models import PetOwnerComment, PetOwner
 
 
 class PetOwnerSerializer(serializers.ModelSerializer):
+    writer = serializers.SerializerMethodField()
+    
+    def get_writer(self, obj):
+        return obj.writer.username
+    
     class Meta:
         model = PetOwner
         fields = "__all__"
