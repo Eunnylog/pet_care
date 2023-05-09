@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import User,CommonModel
+from users.models import User, CommonModel
 
 
 class PetOwner(CommonModel):
@@ -40,10 +40,10 @@ class PetOwner(CommonModel):
 
 
 
-class OwnerComment(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # pr? = models.ForeignKey(PR?, on_delete=models.CASCADE)
-    # updated_at 처리는 어떻게?
+
+class PetOwnerComment(CommonModel):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):
