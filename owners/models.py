@@ -30,9 +30,10 @@ class PetOwner(models.Model):
     def __str__(self):
         return str(self.title)
 
+
 class PetOwnerComment(CommonModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    owner = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):

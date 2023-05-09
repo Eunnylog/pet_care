@@ -28,7 +28,7 @@ class PetSitter(models.Model):
 
 class PetSitterComment(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
-    sitter = models.ForeignKey(PetSitter, on_delete=models.CASCADE)
+    sitter_post = models.ForeignKey(PetSitter, on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):
