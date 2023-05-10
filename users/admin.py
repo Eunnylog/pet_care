@@ -81,10 +81,6 @@ class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
     filter_horizontal = []
 
-class PetOwnerReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','owner','content','star','created_at','updated_at',"show_status")
-    fields =('writer','owner','content','star','created_at','updated_at',"show_status")
-    readonly_fields = ('created_at','updated_at')
 
 class CommonDisplayAdmin(admin.ModelAdmin):
     list_display=()
@@ -99,11 +95,15 @@ class CommonDisplayAdmin(admin.ModelAdmin):
         self.readonly_fields+=self.common_readonly_fields
         super().__init__(model, admin_site)
 
+class PetOwnerReviewDisplay(CommonDisplayAdmin):
+    fields=('writer','owner','content','star')
+    list_display=('writer','owner','content','star')
+
 
 class PetSitterReviewDisplay(CommonDisplayAdmin):
     fields=('writer','sitter','content','star')
     list_display=('writer','sitter','content','star')
-    readonly_fields=('writer','sitter','content','star')
+
 
 
 
