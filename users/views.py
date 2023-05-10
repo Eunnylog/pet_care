@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from users.serializers import UserSerializer,UserUpdateSerializer,UserUpdatePasswordSerializer,UserDelSerializer, PetOwnerReviewCreateSerializer, PetSitterReviewCreateSerializer,PetOwnerReviewSerializer,PetSitterReviewSerializer,StarRatingSerializer
 from users.models import PetOwnerReview, PetSitterReview, User
 
-
+from django.core.mail import EmailMessage
 
 #회원가입
 class SignUp(APIView):
@@ -18,6 +18,14 @@ class SignUp(APIView):
         else:
             return Response({"message": f"{serializer.errors}"}, status=status.HTTP_400_BAD_REQUEST)
 #자신의 데이터
+class SendEmail(APIView):
+    def post(self,request):
+        subject='>_PetCare 인증메일'
+        body='나야'
+        email=request.data.get("email")
+        email = EmailMessage(subject,body,to=[email],)
+        email.send()
+        return Response({"message":"이메일 확인하세요"},status=status.HTTP_200_OK)
 class UserView(APIView):
     permission_classes=[permissions.IsAuthenticated]
     #자신의정보보기

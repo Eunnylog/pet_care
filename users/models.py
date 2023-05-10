@@ -50,11 +50,12 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
+    photo = models.ImageField(blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
     objects = UserManager()
-
+    
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
 
