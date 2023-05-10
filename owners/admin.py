@@ -1,4 +1,5 @@
 from django.contrib import admin
+from users.admin import CommonDisplayAdmin
 from owners.models import PetOwner, PetOwnerComment
 
 
@@ -8,10 +9,9 @@ class PetOwnerDisplay(admin.ModelAdmin):
     readonly_fields = ('created_at','updated_at')
     
 
-class PetOwnerCommentDisplay(admin.ModelAdmin):
-    list_display = ('writer','owner_post','content','created_at','updated_at',"show_status")
-    fields =('writer','owner_post','content','created_at','updated_at',"show_status")
-    readonly_fields = ('created_at','updated_at')
+class PetOwnerCommentDisplay(CommonDisplayAdmin):
+    list_display = ('writer','owner_post','content')
+    fields =('writer','owner_post','content')
 
 
 admin.site.register(PetOwner, PetOwnerDisplay)
