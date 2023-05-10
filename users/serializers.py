@@ -60,8 +60,10 @@ class UserUpdatePasswordSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-
-
+class UserDelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("is_active",)
 
 class PetOwnerReviewCreateSerializer(serializers.ModelSerializer):
     class Meta:
