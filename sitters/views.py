@@ -32,22 +32,27 @@ class PetSitterView(APIView):
 
 class PetSitterDetailAPI(APIView):
     # 게시글 상세보기
-    def get(self, request, pk):
-        sitters = PetSitter.objects.get(id=pk)
+    def get(self, request, sitter_id):
+        sitters = PetSitter.objects.get(id=sitter_id)
         serializer = PetSitterSerializer(sitters)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 게시글 수정하기
-    def put(self, request, pk):
-        sitters = PetSitter.objects.get(id=pk)
+    def put(self, request, sitter_id):
+        sitters = PetSitter.objects.get(id=sitter_id)
         if request.user == sitters.writer:  # 본인이 작성한 게시글이 맞다면
             serializer = PetSitterCreateSerializer(sitters, data=request.data)
-        else:
-            return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
-
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:   # 본인의 게시글이 아니라면
+            return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
     # 게시글 삭제하기
-    def delete(self, request, pk):
-        sitters = PetSitter.objects.get(id=pk)
+    def delete(self, request, sitter_id):
+        sitters = PetSitter.objects.get(id=sitter_id)
         if request.user == sitters.writer:  # 본인이 작성한 게시글이 맞다면
             sitters.delete()
             return Response({'message':'게시글이 삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
