@@ -7,7 +7,7 @@ class PetSitter(CommonModel):
     title = models.CharField(max_length=20) #제목
     content = models.TextField(null=True) # 내용
     # location = models.PointField(blank=False, null=False) # 지역
-    charge = models.IntegerField() # 요금
+    charge = models.PositiveIntegerField() # 요금
     species = (
         ('dog', '강아지'),
         ('cat', '고양이'),
