@@ -26,19 +26,15 @@ class UserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     #업데이트
     def put(self,request):
-
         check_password=request.data.get("check_password")
         password=request.data.get("password")
         print(password)
         user = request.user
         if user.check_password(check_password):
-            print("a")
             serializer = UserUpdatePasswordSerializer(user,data=request.data)
         elif password =="" or password ==None:
-            print("b")
             serializer = UserUpdateSerializer(user,data=request.data)
         else:
-            print("c")
             return Response({"message":"패스워드가 다릅니다"},status=status.HTTP_401_UNAUTHORIZED)
         if serializer.is_valid():
             serializer.save()
