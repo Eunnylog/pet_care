@@ -54,7 +54,7 @@ class PetOwnerReviewView(APIView):
     # 모든 후기 가져오기
     def get(self, request, user_id):
         owner = get_object_or_404(User,pk = user_id)
-        ownerreviews = owner.ownerreviews.all()
+        ownerreviews = owner.ownerreviews.filter(show_status='1')
         serializer = PetOwnerReviewSerializer(ownerreviews, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -73,13 +73,13 @@ class PetOwnerReviewView(APIView):
 class PetOwnerReviewDetailView(APIView):
     # 후기 상세보기
     def get(self, request, user_id, review_id):
-        ownerreview = get_object_or_404(PetOwnerReview, pk=review_id)
+        ownerreview = get_object_or_404(PetOwnerReview, pk=review_id, show_status='1')
         serializer = PetOwnerReviewSerializer(ownerreview)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 후기 수정하기
     def put(self, request, user_id, review_id):
-        ownerreview = get_object_or_404(PetOwnerReview, pk=review_id)
+        ownerreview = get_object_or_404(PetOwnerReview, pk=review_id, show_status='1')
         serializer = PetOwnerReviewCreateSerializer(ownerreview, data=request.data)
         if request.user == ownerreview.writer:
             if serializer.is_valid():
@@ -92,9 +92,10 @@ class PetOwnerReviewDetailView(APIView):
     
     # 후기 삭제하기
     def delete(self, request, user_id, review_id):
-        ownerreview = get_object_or_404(PetOwnerReview, pk=review_id)
+        ownerreview = get_object_or_404(PetOwnerReview, pk=review_id, show_status='1')
         if request.user == ownerreview.writer:
-            ownerreview.delete()
+            ownerreview.show_status='3'
+            ownerreview.save()
             return Response({'mesage': '후기가 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
@@ -105,7 +106,7 @@ class PetSitterReviewView(APIView):
     # 모든 후기 가져오기
     def get(self, request, user_id):
         sitter = get_object_or_404(User,pk = user_id)
-        sitterreviews = sitter.sitterreviews.all()
+        sitterreviews = sitter.sitterreviews.filter(show_status='1')
         serializer = PetSitterReviewSerializer(sitterreviews, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -125,13 +126,13 @@ class PetSitterReviewView(APIView):
 class PetSitterReviewDetailView(APIView):
     # 후기 상세보기
     def get(self, request, user_id, review_id):
-        sitterreview = get_object_or_404(PetSitterReview, pk=review_id)
+        sitterreview = get_object_or_404(PetSitterReview, pk=review_id,show_status='1')
         serializer = PetSitterReviewSerializer(sitterreview)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 후기 수정하기
     def put(self, request, user_id, review_id):
-        sitterreview = get_object_or_404(PetSitterReview, pk=review_id)
+        sitterreview = get_object_or_404(PetSitterReview, pk=review_id,show_status='1')
         serializer = PetSitterReviewCreateSerializer(sitterreview, data=request.data)
         if request.user == sitterreview.writer:
             if serializer.is_valid():
@@ -144,9 +145,10 @@ class PetSitterReviewDetailView(APIView):
     
     # 후기 삭제하기
     def delete(self, request, user_id, review_id):
-        sitterreview = get_object_or_404(PetSitterReview, pk=review_id)
+        sitterreview = get_object_or_404(PetSitterReview, pk=review_id,show_status='1')
         if request.user == sitterreview.writer:
-            sitterreview.delete()
+            sitterreview.show_status='3'
+            sitterreview.save()
             return Response({'mesage': '후기가 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)

@@ -1,9 +1,9 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status,permissions
 from rest_framework.response import Response
-from owners.models import PetOwner, PetOwnerComment
-from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, PetOwnerCommentSerializer, PetOwnerCommentCreateSerializer
+from owners.models import PetOwner, PetOwnerComment, SittersForOwnerPR
+from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, PetOwnerCommentSerializer, PetOwnerCommentCreateSerializer, SittersForOwnerPRSerializer
 
 
 # 게시글 목록과 작성
@@ -96,5 +96,62 @@ class PetOwnerCommentDetailView(APIView):
         if request.user == comment.writer:
             comment.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
+
+
+# owner 에약하기
+class SittersForOwnerPRView(APIView):
+    def get(self, request, owner_id):
+        post = get_object_or_404(PetOwner, id=owner_id)
+        # 글 작성자와 로그인 된 유저가 같은 지 확인 후 리스트 불러오기
+        if request.user == post.writer:
+            reserved_list = SittersForOwnerPR.objects.filter(owner_post = owner_id)
+            serializer = SittersForOwnerPRSerializer(reserved_list, many = True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
+
+    def post(self, request, owner_id):
+        # 로그인 상태에서 예약 가능
+        permission_classes = [permissions.IsAuthenticated]
+        post = get_object_or_404(PetOwner, id=owner_id)
+        # 글 작성자는 예약 불가
+        if post.writer == request.user:
+            return Response("글 작성자는 지원이 불가능합니다.", status=status.HTTP_200_OK)
+        else:
+            # 지원 여부 확인 후 진행
+            if post.sittersforownerpr_set.filter(sitter = request.user):
+                return Response("이미 지원하신 게시글입니다.", status=status.HTTP_200_OK)
+            else:
+                reserved = SittersForOwnerPR(owner_post = post, sitter = request.user)
+                reserved.save()
+                return Response("지원이 완료 되었습니다.", status=status.HTTP_200_OK)
+
+# 시터 선택, 취소
+class SitterIsSelectedView(APIView):
+    # 시터 선택하기
+    def put(self, request, owner_id, user_id):
+        post = get_object_or_404(PetOwner, id=owner_id)
+        # 시터 선택 시 글 작성자와 로그인 된 유저가 동일한지 확인
+        if request.user == post.writer:
+            # 이미 시터 매치가 되었는 지 확인
+            checking = SittersForOwnerPR.objects.filter(owner_post = owner_id, is_selected = True)
+            if checking:
+                # 이미 매치가 되어 있는 사람이라면 취소하기
+                selected_sitter = get_object_or_404(SittersForOwnerPR, owner_post = owner_id, is_selected = True)
+                if selected_sitter.sitter_id == user_id:
+                    selected_sitter.is_selected = False
+                    selected_sitter.save()
+                    return Response("매치가 취소되었습니다.", status=status.HTTP_200_OK)
+                else:
+                    # 이미 시터가 있는 상태에서 다른 사람을 선택하려고 할 때
+                    return Response("이미 매치가 된 게시글입니다.", status=status.HTTP_200_OK)
+            else:
+                # 시터 매치하기
+                selected = get_object_or_404(SittersForOwnerPR, owner_post = owner_id, sitter = user_id)
+                selected.is_selected = True
+                selected.save()
+                return Response("sitter와 매치되었습니다.", status=status.HTTP_200_OK)
         else:
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
