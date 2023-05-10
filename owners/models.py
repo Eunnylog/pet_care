@@ -45,8 +45,6 @@ class PetOwner(CommonModel):
             super(PetOwner, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
 
 
-
-
 class PetOwnerComment(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
