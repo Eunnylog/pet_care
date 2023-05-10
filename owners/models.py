@@ -28,8 +28,8 @@ class PetOwner(CommonModel):
     species = models.CharField("종", max_length=20, choices=species_)
     is_reserved = models.CharField("진행상태", max_length=20, choices=reservation_status, default="0") # 기본값을 0으로 주겠습니다
     photo = models.ImageField("이미지", blank=True)
-    reservation_start = models.DateField("예약시작일")
-    reservation_end = models.DateField("예약종료일")
+    reservation_start = models.DateTimeField("예약시작일")
+    reservation_end = models.DateTimeField("예약종료일")
     reservation_period = models.DurationField("예약기간")
     
     
@@ -43,8 +43,6 @@ class PetOwner(CommonModel):
         else:    
             self.reservation_period = (self.reservation_end - self.reservation_start) + timedelta(days=1)
             super(PetOwner, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
-
-
 
 
 class PetOwnerComment(CommonModel):

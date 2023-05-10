@@ -2,7 +2,6 @@ from rest_framework import serializers
 from owners.models import PetOwnerComment, PetOwner
 
 
-
 class PetOwnerSerializer(serializers.ModelSerializer):
     writer = serializers.SerializerMethodField()
     
@@ -20,8 +19,13 @@ class PetOwnerCreateSerializer(serializers.ModelSerializer):
         fields = ("title","content", "charge","species","reservation_start", "reservation_end")
 
     
-    
-class OwnerCommentSerializer(serializers.ModelSerializer):
+class PetOwnerCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetOwnerComment
         fields = "__all__"
+
+
+class PetOwnerCommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PetOwnerComment
+        fields = ("content",)
