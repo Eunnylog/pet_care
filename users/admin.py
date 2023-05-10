@@ -1,6 +1,7 @@
-from typing import Any, Callable, Optional, Sequence, Union
+from typing import Any, Callable, Optional, Sequence, Type, Union
 from django import forms
 from django.contrib import admin
+from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -89,18 +90,23 @@ class PetOwnerReviewDisplay(admin.ModelAdmin):
     readonly_fields = ('created_at','updated_at')
 
 class CommonDisplayAdmin(admin.ModelAdmin):
-    list_display=('created_at','updated_at',"show_status")
-    fields =('created_at','updated_at',"show_status")
-    readonly_fields = ('created_at','updated_at')
-class PetSitterReviewDisplay(CommonDisplayAdmin):
-    def get_list_display(self, request: HttpRequest) -> Sequence[str]:
-        
-        return ('writer','sitter','content','star')+self.list_display
-    def get_fields(self, request: HttpRequest,obj):
-        return ('writer','sitter','content','star')+self.fields
-    #list_display = ('writer','sitter','content','star')
-    #fields =('writer','sitter','content','star')
+    list_display=()
+    list_display=()
+    readonly_fields=()
+    common_list_display=('created_at','updated_at',"show_status")
+    common_fields =('created_at','updated_at',"show_status")
+    common_readonly_fields = ('created_at','updated_at')
+    def __init__(self, model: type, admin_site):
+        self.fields+=self.common_fields
+        self.list_display+=self.common_list_display
+        self.readonly_fields+=self.common_readonly_fields
+        super().__init__(model, admin_site)
 
+
+class PetSitterReviewDisplay(CommonDisplayAdmin):
+    fields=('writer','sitter','content','star')
+    list_display=('writer','sitter','content','star')
+    readonly_fields=('writer','sitter','content','star')
 
 
 
