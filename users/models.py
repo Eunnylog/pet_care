@@ -8,7 +8,7 @@ class CommonModel(models.Model):
     show_statuses=(('1','active'),
              ('2','hide'),
              ('3','delete'),)
-    c=models.CharField(choices=show_statuses, max_length=1,default="1")
+    show_status=models.CharField(choices=show_statuses, max_length=1,default="1")
 class UserManager(BaseUserManager):
     def create_user(self, username,email, password=None):
         """
