@@ -1,9 +1,11 @@
+from typing import Any, Callable, Optional, Sequence, Union
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from django.http.request import HttpRequest
 from users.models import User,PetOwnerReview, PetSitterReview
 
 
@@ -86,11 +88,19 @@ class PetOwnerReviewDisplay(admin.ModelAdmin):
     fields =('writer','owner','content','star','created_at','updated_at',"show_status")
     readonly_fields = ('created_at','updated_at')
 
-
-class PetSitterReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','sitter','content','star','created_at','updated_at',"show_status")
-    fields =('writer','sitter','content','star','created_at','updated_at',"show_status")
+class CommonDisplayAdmin(admin.ModelAdmin):
+    list_display=('created_at','updated_at',"show_status")
+    fields =('created_at','updated_at',"show_status")
     readonly_fields = ('created_at','updated_at')
+class PetSitterReviewDisplay(CommonDisplayAdmin):
+    def get_list_display(self, request: HttpRequest) -> Sequence[str]:
+        
+        return ('writer','sitter','content','star')+self.list_display
+    def get_fields(self, request: HttpRequest,obj):
+        return ('writer','sitter','content','star')+self.fields
+    #list_display = ('writer','sitter','content','star')
+    #fields =('writer','sitter','content','star')
+
 
 
 
