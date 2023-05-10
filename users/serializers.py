@@ -2,6 +2,8 @@ from rest_framework import serializers
 from users.models import PetOwnerReview, PetSitterReview
 from users.models import User
 from django.db.models import Avg
+from owners.serializers import PetOwnerSerializer
+from sitters.serializers import PetSitterSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -109,3 +111,22 @@ class StarRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id','username','star_rating','star_count')
+
+class MyPageSerializer(serializers.ModelSerializer):
+    star_rating = serializers.SerializerMethodField()
+    review_count = serializers.SerializerMethodField()
+    ownerreviews = PetOwnerReviewSerializer(many= True)
+    sitterreviews = PetSitterReviewSerializer(many=True)
+    petowner_set = PetOwnerSerializer(many=True)
+    petsitter_set = PetSitterSerializer(many = True)
+
+    def get_star_rating(self, obj):
+        avg = obj.ownerreviews.aggregate(Avg('star'))
+        return avg['star__avg']
+    
+    def get_review_count(self, obj):
+        return obj.ownerreviews.count()
+
+    class Meta:
+        model=User
+        fields = ('id','username','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set')
