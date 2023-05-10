@@ -41,7 +41,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username=models.CharField(max_length=50,unique=True)
-    nick_name=models.CharField(max_length=50,default=True,null=True)
+    nick_name=models.CharField(max_length=50,default=True,null=True,blank=True)
     email = models.EmailField(
         verbose_name="email address",
         max_length=255,
@@ -78,13 +78,13 @@ class User(AbstractBaseUser):
 
 
 class PetOwnerReview(CommonModel):
-    writer = models.ForeignKey(User, on_delete=models.CASCADE,related_name='myownerreviews')
+    writer = models.ForeignKey(User, on_delete=models.SET_DEFAULT,default=1)
     owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'ownerreviews')
     content = models.TextField()
     star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
 
 class PetSitterReview(CommonModel):
-    writer = models.ForeignKey(User, on_delete=models.CASCADE,related_name='mysitterreviews')
+    writer = models.ForeignKey(User, on_delete=models.SET_DEFAULT,default=1)
     sitter = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'sitterreviews')
     content = models.TextField()
     star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
