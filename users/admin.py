@@ -82,14 +82,14 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = []
 
 class PetOwnerReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','owner','content','star','created_at','updated_at')
-    fields =('writer','owner','content','star','created_at','updated_at')
+    list_display = ('writer','owner','content','star','created_at','updated_at',"show_status")
+    fields =('writer','owner','content','star','created_at','updated_at',"show_status")
     readonly_fields = ('created_at','updated_at')
 
 
 class PetSitterReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','sitter','content','star','created_at','updated_at')
-    fields =('writer','sitter','content','star','created_at','updated_at')
+    list_display = ('writer','sitter','content','star','created_at','updated_at',"show_status")
+    fields =('writer','sitter','content','star','created_at','updated_at',"show_status")
     readonly_fields = ('created_at','updated_at')
 
 
