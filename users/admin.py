@@ -1,12 +1,9 @@
-from typing import Any, Callable, Optional, Sequence, Type, Union
 from django import forms
 from django.contrib import admin
-from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from django.http.request import HttpRequest
 from users.models import User,PetOwnerReview, PetSitterReview
 
 
