@@ -98,12 +98,12 @@ class CommonDisplayAdmin(admin.ModelAdmin):
 class PetOwnerReviewDisplay(CommonDisplayAdmin):
     fields=('writer','owner','content','star')
     list_display=('writer','owner','content','star')
-    readonly_fields=('writer','owner','content','star')
+
 
 class PetSitterReviewDisplay(CommonDisplayAdmin):
     fields=('writer','sitter','content','star')
     list_display=('writer','sitter','content','star')
-    readonly_fields=('writer','sitter','content','star')
+
 
 
 
