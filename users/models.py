@@ -80,7 +80,6 @@ class User(AbstractBaseUser):
 
 
 
-
 class PetOwnerReview(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.SET_DEFAULT,default=1)
     owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'ownerreviews')
