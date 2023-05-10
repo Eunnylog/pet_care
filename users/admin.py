@@ -4,8 +4,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from users.models import User,PetOwnerReview, PetSitterReview
 
-from users.models import User
 
 
 class UserCreationForm(forms.ModelForm):
@@ -81,9 +81,23 @@ class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
     filter_horizontal = []
 
+class PetOwnerReviewDisplay(admin.ModelAdmin):
+    list_display = ('writer','owner','content','star','created_at','updated_at')
+    fields =('writer','owner','content','star','created_at','updated_at')
+    readonly_fields = ('created_at','updated_at')
+
+
+class PetSitterReviewDisplay(admin.ModelAdmin):
+    list_display = ('writer','sitter','content','star','created_at','updated_at')
+    fields =('writer','sitter','content','star','created_at','updated_at')
+    readonly_fields = ('created_at','updated_at')
+
+
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
+admin.site.register(PetOwnerReview, PetOwnerReviewDisplay)
+admin.site.register(PetSitterReview, PetSitterReviewDisplay)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
