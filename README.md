@@ -32,7 +32,9 @@ python species_db.py<br/>
 
 </dir>
 
-
+## Comment
+CRUD
+Permissions, show_status
 Frontend와 연결할 때, SerializerMethodField()로 serializer 커스텀하여 어떤 항목 가져올지
 
 
