@@ -5,7 +5,10 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class CommonModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    show_statuses=(('1','active'),
+             ('2','hide'),
+             ('3','delete'),)
+    show_status=models.CharField(choices=show_statuses, max_length=1,default="1")
 class UserManager(BaseUserManager):
     def create_user(self, username,email, password=None):
         """

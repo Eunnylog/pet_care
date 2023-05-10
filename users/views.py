@@ -3,7 +3,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework import status, permissions
 from rest_framework.response import Response
 
-from users.serializers import UserSerializer,UserUpdateSerializer, PetOwnerReviewCreateSerializer, PetSitterReviewCreateSerializer,PetOwnerReviewSerializer,PetSitterReviewSerializer,StarRatingSerializer
+from users.serializers import UserSerializer,UserUpdateSerializer,UserUpdatePasswordSerializer, PetOwnerReviewCreateSerializer, PetSitterReviewCreateSerializer,PetOwnerReviewSerializer,PetSitterReviewSerializer,StarRatingSerializer
 from users.models import PetOwnerReview, PetSitterReview, User
 
 
@@ -27,13 +27,22 @@ class UserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     #업데이트
     def put(self,request):
-        user = get_object_or_404(User,id=request.user.id)
-        serializer = UserUpdateSerializer(user,data=request.data)
+        check_password=request.data.get("check_password")
+        password=request.data.get("password")
+        print(password)
+        user = request.user
+        if user.check_password(check_password):
+            serializer = UserUpdatePasswordSerializer(user,data=request.data)
+        elif password =="" or password ==None:
+            serializer = UserUpdateSerializer(user,data=request.data)
+        else:
+            return Response({"message":"패스워드가 다릅니다"},status=status.HTTP_401_UNAUTHORIZED)
         if serializer.is_valid():
             serializer.save()
             return Response({"message":"수정완료!"}, status=status.HTTP_201_CREATED)
         else:
             return Response({"message":f"${serializer.errors}"}, status=status.HTTP_400_BAD_REQUEST)
+
     #삭제
     def delete(self,request):
         user = get_object_or_404(User,id=request.user.id)
