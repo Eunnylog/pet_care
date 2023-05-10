@@ -3,7 +3,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework import status, permissions
 from rest_framework.response import Response
 
-from users.serializers import UserSerializer,UserUpdateSerializer,UserUpdatePasswordSerializer, PetOwnerReviewCreateSerializer, PetSitterReviewCreateSerializer,PetOwnerReviewSerializer,PetSitterReviewSerializer,StarRatingSerializer
+from users.serializers import UserSerializer,UserUpdateSerializer,UserUpdatePasswordSerializer, PetOwnerReviewCreateSerializer, PetSitterReviewCreateSerializer,PetOwnerReviewSerializer,PetSitterReviewSerializer,StarRatingSerializer,MyPageSerializer
 from users.models import PetOwnerReview, PetSitterReview, User
 
 
@@ -159,4 +159,10 @@ class StarRatingView(APIView):
     def get(self, request, user_id):
         user = get_object_or_404(User, pk = user_id)
         serializer = StarRatingSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class MyPageView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk = user_id)
+        serializer = MyPageSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
