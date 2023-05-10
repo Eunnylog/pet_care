@@ -52,3 +52,12 @@ class PetOwnerComment(CommonModel):
 
     def __str__(self):
         return str(self.content)
+
+
+class SittersForOwnerPR(CommonModel):
+    owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
+    sitter = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_selected = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.sitter)
