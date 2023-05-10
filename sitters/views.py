@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
-from sitters.models import PetSitter
-from sitters.serializers import PetSitterSerializer, PetSitterCreateSerializer
+from sitters.models import PetSitter, PetSitterComment
+from sitters.serializers import PetSitterSerializer, PetSitterCreateSerializer, PetSitterCommentSerializer, PetSitterCommentCreateSerializer
 
 
 # 게시글 리스트
@@ -21,13 +22,6 @@ class PetSitterView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# from django.shortcuts import get_object_or_404
-# from rest_framework.views import APIView
-# from rest_framework import status
-# from sitters.models import PetSitter, PetSitterComment
-# from sitters.serializers import PetSitterSerializer, PetSitterCreateSerializer, PetSitterCommentSerializer, PetSitterCommentCreateSerializer
-
 
 
 class PetSitterDetailAPI(APIView):
@@ -60,7 +54,7 @@ class PetSitterDetailAPI(APIView):
             return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
 
 
-'''
+# 댓글
 class PetSitterCommentView(APIView):
     def get(self, request, sitter_id):
         """댓글 요청 함수"""
@@ -92,7 +86,6 @@ class PetSitterCommentDetailView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:   # 본인의 게시글이 아니라면
             return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
-    
 
     def delete(self, request, sitter_id, comment_id):
         """댓글 삭제 함수"""
@@ -102,4 +95,3 @@ class PetSitterCommentDetailView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
-'''
