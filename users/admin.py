@@ -81,16 +81,29 @@ class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
     filter_horizontal = []
 
-class PetOwnerReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','owner','content','star','created_at','updated_at')
-    fields =('writer','owner','content','star','created_at','updated_at')
-    readonly_fields = ('created_at','updated_at')
+
+class CommonDisplayAdmin(admin.ModelAdmin):
+    list_display=()
+    list_display=()
+    readonly_fields=()
+    common_list_display=('created_at','updated_at',"show_status")
+    common_fields =('created_at','updated_at',"show_status")
+    common_readonly_fields = ('created_at','updated_at')
+    def __init__(self, model: type, admin_site):
+        self.fields+=self.common_fields
+        self.list_display+=self.common_list_display
+        self.readonly_fields+=self.common_readonly_fields
+        super().__init__(model, admin_site)
+
+class PetOwnerReviewDisplay(CommonDisplayAdmin):
+    fields=('writer','owner','content','star')
+    list_display=('writer','owner','content','star')
 
 
-class PetSitterReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','sitter','content','star','created_at','updated_at')
-    fields =('writer','sitter','content','star','created_at','updated_at')
-    readonly_fields = ('created_at','updated_at')
+class PetSitterReviewDisplay(CommonDisplayAdmin):
+    fields=('writer','sitter','content','star')
+    list_display=('writer','sitter','content','star')
+
 
 
 

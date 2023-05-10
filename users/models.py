@@ -5,7 +5,10 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class CommonModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    show_statuses=(('1','active'),
+             ('2','hide'),
+             ('3','delete'),)
+    show_status=models.CharField(choices=show_statuses, max_length=1,default="1")
 class UserManager(BaseUserManager):
     def create_user(self, username,email, password=None):
         """
@@ -82,9 +85,13 @@ class PetOwnerReview(CommonModel):
     owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'ownerreviews')
     content = models.TextField()
     star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
+    def __str__(self):
+        return str(self.content)
 
 class PetSitterReview(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.SET_DEFAULT,default=1)
     sitter = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'sitterreviews')
     content = models.TextField()
     star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
+    def __str__(self):
+        return str(self.content)

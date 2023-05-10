@@ -1,5 +1,6 @@
 from datetime import timedelta
 from django.db import models
+from django.utils import timezone
 from users.models import User, CommonModel
 from django.core.exceptions import ValidationError
 
@@ -54,13 +55,16 @@ class PetOwner(CommonModel):
     def __str__(self):
         return str(self.title)
     
+    # 예약시작일과 현재날짜 비교
     # 예약 기간
     def save(self, **kwargs):
+        if self.reservation_start < timezone.now():
+          raise ValidationError("예약시작일이 오늘보다 이전일 수 없습니다.")
         if self.reservation_end < self.reservation_start:
             raise ValidationError('예약 종료일이 예약 시작일보다 이전일 수 없습니다.')
         else:    
             self.reservation_period = (self.reservation_end - self.reservation_start) + timedelta(days=1)
-            super(PetOwner, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
+            super(CommonModel, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
 
 
 
@@ -71,3 +75,12 @@ class PetOwnerComment(CommonModel):
 
     def __str__(self):
         return str(self.content)
+
+
+class SittersForOwnerPR(CommonModel):
+    owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
+    sitter = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_selected = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.sitter)

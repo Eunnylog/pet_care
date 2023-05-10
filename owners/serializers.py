@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from owners.models import PetOwnerComment, PetOwner
+from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR
 
 
 class PetOwnerSerializer(serializers.ModelSerializer):
@@ -29,3 +29,12 @@ class PetOwnerCommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetOwnerComment
         fields = ("content",)
+
+class SittersForOwnerPRSerializer(serializers.ModelSerializer):
+    # 아이디 값이 아닌 이름으로 표시
+    # owner_post = serializers.StringRelatedField()
+    # sitter = serializers.StringRelatedField()
+
+    class Meta:
+        model = SittersForOwnerPR
+        fields = "__all__"

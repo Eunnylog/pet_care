@@ -12,10 +12,16 @@
 4.change info<br/> 
 5.del user<br/> 
 
+
 <br/>
 -review-
 1. 리뷰 불러오기, 작성, 수정, 삭제 확인, 각 권한 확인.
 <br/> 
+-예약-
+1. 글 작성 후 다른 아이디로 지원 가능한지 확인
+2. 글 작성자라면 지원자 리스트 확인 후 지원자 선택 확인
+<br/> 
+
 마지막 작업시 해야되는것: users.model의 user.nickname에unique값 지정하기
 </dir>
 
