@@ -21,7 +21,7 @@ from owners.models import Species
 
 CSV_PATH = './species_breeds.csv'
 
-with open(CSV_PATH, newline='') as csvfile:
+with open(CSV_PATH, newline='', encoding='UTF8') as csvfile:
     data_reader = csv.DictReader(csvfile)
     for row in data_reader:
         print(row)
