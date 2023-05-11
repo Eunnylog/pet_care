@@ -1,6 +1,5 @@
 from datetime import timedelta
 from datetime import datetime
-from django.utils import timezone
 from django.db import models
 from users.models import User, CommonModel
 from django.core.exceptions import ValidationError
@@ -42,7 +41,7 @@ class PetSitter(CommonModel):
     # 예약시작일과 현재날짜 비교
     # 예약 기간
     def save(self, **kwargs):
-        today = datetime.now()
+        today=datetime.now()
         if self.reservation_start < today.date():
           raise ValidationError("예약시작일이 오늘보다 이전일 수 없습니다.")
         if self.reservation_end < self.reservation_start:

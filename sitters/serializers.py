@@ -12,6 +12,7 @@ class PetSitterSerializer(serializers.ModelSerializer):
         model = PetSitter
         fields = "__all__"
 
+
 class PetSitterCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetSitter

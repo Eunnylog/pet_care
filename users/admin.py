@@ -4,8 +4,21 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from users.models import User,PetOwnerReview, PetSitterReview
+from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
 
+
+class CommonDisplayAdmin(admin.ModelAdmin):
+    list_display=()
+    list_display=()
+    readonly_fields=()
+    common_list_display=('created_at','updated_at',"show_status")
+    common_fields =('created_at','updated_at',"show_status")
+    common_readonly_fields = ('created_at','updated_at')
+    def __init__(self, model: type, admin_site):
+        self.fields+=self.common_fields
+        self.list_display+=self.common_list_display
+        self.readonly_fields+=self.common_readonly_fields
+        super().__init__(model, admin_site)
 
 
 class UserCreationForm(forms.ModelForm):
@@ -59,11 +72,11 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ["username","email", "is_admin"]
+    list_display = ["username","email", "is_admin","photo"]
     list_filter = ["is_admin"]
     fieldsets = [
         (None, {"fields": ["username", "password"]}),
-        ("Personal info", {"fields": ["email"]}),
+        ("Personal info", {"fields": ["email","photo"]}),
         ("Permissions", {"fields": ["is_admin"]}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -73,7 +86,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ["wide"],
-                "fields": ["username","email", "password1", "password2"],
+                "fields": ["username","email","photo", "password1", "password2"],
             },
         ),
     ]
@@ -81,34 +94,29 @@ class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
     filter_horizontal = []
 
-class PetOwnerReviewDisplay(admin.ModelAdmin):
-    list_display = ('writer','owner','content','star','created_at','updated_at',"show_status")
-    fields =('writer','owner','content','star','created_at','updated_at',"show_status")
-    readonly_fields = ('created_at','updated_at')
 
-class CommonDisplayAdmin(admin.ModelAdmin):
-    list_display=()
-    list_display=()
-    readonly_fields=()
-    common_list_display=('created_at','updated_at',"show_status")
-    common_fields =('created_at','updated_at',"show_status")
-    common_readonly_fields = ('created_at','updated_at')
-    def __init__(self, model: type, admin_site):
-        self.fields+=self.common_fields
-        self.list_display+=self.common_list_display
-        self.readonly_fields+=self.common_readonly_fields
-        super().__init__(model, admin_site)
+class CheckEmailAdmin(admin.ModelAdmin):
+    list_display=('email','random_num','try_num','created_at')
+    list_display=('email','random_num','try_num','created_at')
+    readonly_fields=('created_at',)
+
+
+class PetOwnerReviewDisplay(CommonDisplayAdmin):
+    fields=('writer','owner','content','star')
+    list_display=('writer','owner','content','star')
 
 
 class PetSitterReviewDisplay(CommonDisplayAdmin):
     fields=('writer','sitter','content','star')
     list_display=('writer','sitter','content','star')
-    readonly_fields=('writer','sitter','content','star')
+
 
 
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
+admin.site.register(CheckEmail, CheckEmailAdmin)
+
 admin.site.register(PetOwnerReview, PetOwnerReviewDisplay)
 admin.site.register(PetSitterReview, PetSitterReviewDisplay)
 # ... and, since we're not using Django's built-in permissions,
