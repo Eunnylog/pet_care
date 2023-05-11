@@ -25,8 +25,9 @@ class SendEmail(APIView):
     def post(self,request):
         try:
             User.objects.get(email=email)
-        except:
             return Response({"message":"아이디가 이미 존재합니다."},status=status.HTTP_400_BAD_REQUEST)
+        except:
+            pass
         subject='>_PetCare 인증메일'
         email=request.data.get("email")
         body=make64(email)
