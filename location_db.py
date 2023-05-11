@@ -21,7 +21,7 @@ from owners.models import Location
 
 CSV_PATH = './location_code.csv'
 
-with open(CSV_PATH, newline='', encoding='UTF8') as csvfile:
+with open(CSV_PATH, newline='') as csvfile:
     data_reader = csv.DictReader(csvfile)
     for row in data_reader:
         print(row)
