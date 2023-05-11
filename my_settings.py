@@ -26,7 +26,7 @@ EMAIL = {
     'EMAIL_PORT'         : 587,                   
     'EMAIL_HOST'         : 'smtp.gmail.com',
     'EMAIL_HOST_USER'    : 'pretty981210@gmail.com',#pjm970128@gmail.com
-    'EMAIL_HOST_PASSWORD': 'jgauvhtqadzwoiwq', 
+    'EMAIL_HOST_PASSWORD': 'tyuhgkzyjcylkjbn', 
     'SERVER_EMAIL'       : 'Gmail ID',
     'REDIRECT_PAGE'      : 'https://wave1994.tistory.com' 
 }
