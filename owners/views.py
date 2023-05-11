@@ -98,7 +98,7 @@ class PetOwnerCommentDetailView(APIView):
         if request.user == comment.writer:
             comment.show_status='3'
             comment.save()
-            return Response({'message': '후기가 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
+            return Response({'message': '댓글이 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'message': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
 
