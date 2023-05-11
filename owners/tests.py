@@ -4,7 +4,18 @@ from rest_framework import status
 from owners.models import PetOwner, Location, Species
 from users.models import User
 import csv
+from django.test.client import MULTIPART_CONTENT, encode_multipart, BOUNDARY # 이미지 업로드
+from PIL import Image
+import tempfile
+from faker import Faker
+from owners.serializers import PetOwnerSerializer
 
+# 임시파일 생성
+def get_temporary_image(temp_file):
+    size = (200, 200)
+    color = (255,0,0,0)
+    photo = Image.new('RGBA', size, color)
+    return temp_file
 
 # 오너 게시글 작성 테스트
 class OwnerCreateTest(APITestCase):
@@ -56,6 +67,43 @@ class OwnerCreateTest(APITestCase):
             data = self.owner_post_data,
             HTTP_AUTHORIZATION = f"Bearer {self.access_token}"
         )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['writer'], self.user_data['username'])
+    
+    # 이미지 확인    
+    def test_create_owner_post_with_photo(self):
+        temp_file = tempfile.NamedTemporaryFile()  # 파이썬에서 제공하는 임시파일 만드는 방식
+        temp_file.name = "image.png"
+        image_file = get_temporary_image(temp_file)
+        image_file.seek(0)
+        self.owner_post_data["photo"] = temp_file
+        
+        # 전송
+        response = self.client.post(
+            path = reverse('petowner_view'),
+            data=encode_multipart(data = self.owner_post_data, boundary=BOUNDARY),
+            content_type = MULTIPART_CONTENT,
+            HTTP_AUTHORIZATION = f"Bearer {self.access_token}"
+        )
         print(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['writer'], self.user_data['username'])
+
+        
+# 오너 게시글 읽기 테스트        
+# class OwnerPostReadTest(APITestCase):
+#     @classmethod
+#     def serUpTestData(cls):
+#         cls.faker = Faker()
+#         cls.owner_posts = []
+#         for i in range(10):
+#             cls.user = User.objects.create_user(cls.faker.name(),cls.faker.email(), cls.faker.word())
+#             cls.owner_posts.append(PetOwner.objects.create(title=cls.faker.sentence(), content=cls.faker.text(), writer=cls.user))
+            
+#     def test_get_owner_post(self):
+#         for post in self.owner_posts:
+#             url = post.get_absolute_url()
+#             response = self.client.get(url)
+#             serializer = PetOwnerSerializer(post).data
+#             for k, v in serializer.items():
+#                 print(k)

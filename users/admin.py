@@ -83,7 +83,7 @@ class UserAdmin(BaseUserAdmin):
 
 
 class CommonDisplayAdmin(admin.ModelAdmin):
-    list_display=()
+    fields=()
     list_display=()
     readonly_fields=()
     common_list_display=('created_at','updated_at',"show_status")

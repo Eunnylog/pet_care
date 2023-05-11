@@ -4,6 +4,7 @@ from django.utils import timezone
 from users.models import User, CommonModel
 from django.core.exceptions import ValidationError
 from rest_framework.response import Response
+from django.urls import reverse
 
 
 class Location(models.Model):
@@ -67,6 +68,8 @@ class PetOwner(CommonModel):
             self.reservation_period = (self.reservation_end - self.reservation_start) + timedelta(days=1)
             super(CommonModel, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
 
+    # def get_absolute_url(self):
+    #     return reverse('petowner_detail_View', kwargs={'owner_id':self.pk})
 
 
 class PetOwnerComment(CommonModel):
