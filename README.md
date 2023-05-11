@@ -35,6 +35,8 @@ python species_db.py<br/>
 마지막 작업시 해야되는것: users.model의 user.nickname에unique값 지정하기
 
 </dir>
+owner model의 location, species field를 FK에서 Charfield로 변경
+프론트에서 검색시 팝업으로 구현 시도 예정
 
 ## Comment
 CRUD
