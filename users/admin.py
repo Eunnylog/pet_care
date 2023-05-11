@@ -10,7 +10,6 @@ from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
 class CommonDisplayAdmin(admin.ModelAdmin):
     fields=()
     list_display=()
-    list_display=()
     readonly_fields=()
     common_list_display=('created_at','updated_at',"show_status")
     common_fields =('created_at','updated_at',"show_status")
