@@ -15,12 +15,14 @@ class PetSitterView(APIView):
     
     # 게시글 작성하기
     def post(self, request):
+        if not request.user.is_authenticated:
+              return Response({"message":"로그인 해주세요"}, status=status.HTTP_401_UNAUTHORIZED)
         serializer = PetSitterCreateSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save(writer=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": f'${serializer.errors}'}, status=status.HTTP_400_BAD_REQUEST)
 
 # from django.shortcuts import get_object_or_404
 # from rest_framework.views import APIView
