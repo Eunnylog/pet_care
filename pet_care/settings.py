@@ -43,11 +43,13 @@ INSTALLED_APPS = [
     'owners',
     'sitters',
     'rest_framework_simplejwt',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -187,3 +189,6 @@ EMAIL_HOST_USER = my_settings.EMAIL['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = my_settings.EMAIL['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = my_settings.EMAIL['EMAIL_USE_TLS']      
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+ # CORS Header 설정. 개발시엔 True, 배포시엔 특정 url으로만 가능하도록 변경해야함
+CORS_ALLOW_ALL_ORIGINS = True
