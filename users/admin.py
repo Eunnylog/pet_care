@@ -8,6 +8,7 @@ from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
 
 
 class CommonDisplayAdmin(admin.ModelAdmin):
+    fields=()
     list_display=()
     list_display=()
     readonly_fields=()
