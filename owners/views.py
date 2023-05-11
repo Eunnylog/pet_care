@@ -58,6 +58,7 @@ class PetOwnerDetailView(APIView):
 
 # 댓글 목록과 작성 
 class PetOwnerCommentView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request, owner_id):
         """댓글 요청 함수"""
         owner_post = get_object_or_404(PetOwner, id=owner_id)
@@ -67,7 +68,6 @@ class PetOwnerCommentView(APIView):
 
     def post(self, request, owner_id):
         """댓글 작성 함수"""
-        permission_classes = [permissions.IsAuthenticated]
         serializer = PetOwnerCommentCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(writer=request.user, owner_post_id=owner_id)
@@ -78,6 +78,7 @@ class PetOwnerCommentView(APIView):
 
 # 댓글 수정, 삭제
 class PetOwnerCommentDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def put(self, request, owner_id, comment_id):
         """댓글 수정 함수"""
         comment = get_object_or_404(PetOwnerComment, id=comment_id, show_status='1')
