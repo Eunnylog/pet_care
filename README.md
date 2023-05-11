@@ -1,4 +1,9 @@
 # pet_care
+작업 예정:<br/> 
+duration filed 삭제<br/> 
+owner post detail delete 진짜 삭제하지 않고 status값 바꾸기<br/> 
+이메일 인증 횟수 증가를 통한 제한걸기
+이메일 인증 시간 지나면 삭제
 <big>User</big>
 
 <dir>
@@ -28,11 +33,12 @@ python species_db.py<br/>
 <br/> 
 
 마지막 작업시 해야되는것: users.model의 user.nickname에unique값 지정하기
-작업 예정:owner post detail delete 진짜 삭제하지 않고 status값 바꾸기
 
 </dir>
 
-
+## Comment
+CRUD
+Permissions, show_status
 Frontend와 연결할 때, SerializerMethodField()로 serializer 커스텀하여 어떤 항목 가져올지
 
 
