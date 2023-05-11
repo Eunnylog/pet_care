@@ -16,7 +16,7 @@ from users.models import User
 #         self.assertEqual(response.status_code, 201) 
 
 
-# 회원가입 테트
+# 회원가입 테트스
 class UserRegistrationTest(APITestCase):
     def test_registration(self):
         url = reverse("sign_up")  # name을 이용해 회원가입 url 가져옴
@@ -48,6 +48,5 @@ class LoginUserTest(APITestCase):
             path=reverse('sign_in'),
             HTTP_AUTHORIZATION = f"Bearer {access_token}"
         )
-        print(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['username'], self.data['username'])
