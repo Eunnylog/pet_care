@@ -13,74 +13,41 @@ from users.models import User
 #             path = reverse("petownerreview_view", kwargs={"user_id":1}),
 #             data = self.review_data,
 #         )
-#         self.assertEqual(response.status_code, 201)
-
-# class UserRegistrationTest(APITestCase):
-#     def test_sign_up(self):
-#         url = reverse("sign_up")
-#         user_data = {
-#         "username": "testuser",
-#         "email": "test@testuser.com",
-#         "password": "passtest"
-#         }
-#         response =self.client.post(url, user_data)
-#         print(response.data)
-#         self.assertEqual(response.status_code, 201)
+#         self.assertEqual(response.status_code, 201) 
 
 
-#     def test_sign_in(self):
-#         url = reverse("token_obtain_pair")
-#         user_data = {
-#         "username": "testuser",
-#         "email": "test@testuser.com",
-#         "password": "passtest"
-#         }
-#         response = self.client.post(url, user_data)
-#         print(response.data)
-#         self.assertEqual(response.status_code, 200)
-
-
-
+# 회원가입 테스트
 class UserRegistrationTest(APITestCase):
-    def setUp(self):
-        self.data = {
-            'username': 'testuser',
-            'email': 'test@testuser.com',
-            'password': 'passtest'
+    def test_registration(self):
+        url = reverse("sign_up")  # name을 이용해 회원가입 url 가져옴
+        user_data = {   
+            "username": "test",
+            "email": "test@test.com",
+            "password":"1234",
         }
-        self.user = User.objects.create_user('testuser', 'test@testuser.com', 'passtest')
+        response = self.client.post(url, user_data)  # post에 url과 유저데이터 담아줌
+        self.assertEqual(response.status_code, 201)
 
+
+# 로그인 테스트
+class LoginUserTest(APITestCase):
+    def setUp(self):
+        
+        self.data = {"username": "test","email":"test@test.com", "password":"1234"}
+        self.user = User.objects.create_user("test","test@test.com","1234")  # create_user는 models.py에 설정해준 메소드
+    
+    # 로그인 확인    
     def test_login(self):
-        response = self.client.post(reverse("token_obtain_pair"), self.data)
-        # print(response.data["access"])
+        response = self.client.post(reverse('token_obtain_pair'), self.data)
         self.assertEqual(response.status_code, 200)
-
-    #사용자 정보조회
-    # access_token 받아오기=
-    # self.client한테 post를 보냄
-    # reverse("url의 name"): post 보낸 주소 <=여기까지 로그인 진행임
-    # self.data<=로그인 진행하고 받아온 데이터
-    # data['access'] 받아온 데이터의 access 데이터를 받아옴
+    
+    # 회원 정보 확인    
     def test_get_user_data(self):
-        access_token = self.client.post(reverse("token_obtain_pair"), self.data).data['access']
-        #access토큰을 헤더에 실어서 get요청을 view url에 함
+        access_token = self.client.post(reverse('token_obtain_pair'), self.data).data['access']
         response = self.client.get(
-                path=reverse('sign_in'),
-                HTTP_AUTHORIZATION=f"Bearer {access_token}"
+            path=reverse('sign_in'),
+            HTTP_AUTHORIZATION = f"Bearer {access_token}"
         )
-        print(response.data)
         self.assertEqual(response.status_code, 200)
-        # self.assertEqual(response.data['username'], self.data['username'])
-
-
-#회원정보 수정
-
-
-#회원 탈퇴
-    # def tearDown(self,request):
-    #     response = self.client.post(reverse("token_obtain_pair"), self.data)
-    #     user = get_object_or_404(User,id=request.user.id)
-    #     user.delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
-    #     self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.data['username'], self.data['username'])
 
