@@ -30,7 +30,7 @@ class PetOwnerView(APIView):
 
 # 게시글 상세페이지 수정, 삭제    
 class PetOwnerDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # 게시글 상세보기
     def get(self, request, owner_id):
         owner_post = get_object_or_404(PetOwner, id = owner_id)
