@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from users.models import User, CommonModel
 from django.core.exceptions import ValidationError
+from rest_framework.response import Response
 
 
 class Location(models.Model):
