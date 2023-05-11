@@ -114,6 +114,7 @@ class PetOwnerCommentDetailView(APIView):
 
 # owner 에약하기
 class SittersForOwnerPRView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, owner_id):
         post = get_object_or_404(PetOwner, id=owner_id)
         # 글 작성자와 로그인 된 유저가 같은 지 확인 후 리스트 불러오기
@@ -126,7 +127,6 @@ class SittersForOwnerPRView(APIView):
 
     def post(self, request, owner_id):
         # 로그인 상태에서 예약 가능
-        permission_classes = [permissions.IsAuthenticated]
         post = get_object_or_404(PetOwner, id=owner_id)
         # 글 작성자는 예약 불가
         if post.writer == request.user:
@@ -142,6 +142,7 @@ class SittersForOwnerPRView(APIView):
 
 # 시터 선택, 취소
 class SitterIsSelectedView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     # 시터 선택하기
     def put(self, request, owner_id, user_id):
         post = get_object_or_404(PetOwner, id=owner_id)

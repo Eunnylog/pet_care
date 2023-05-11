@@ -129,4 +129,4 @@ class MyPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields = ('id','username','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set')
+        fields = ('id','username','nick_name','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set')
