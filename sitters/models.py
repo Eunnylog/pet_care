@@ -28,8 +28,8 @@ class PetSitter(CommonModel):
     content = models.TextField() # 내용
     charge = models.PositiveIntegerField() # 요금
     is_reserved = models.CharField("진행상태", max_length=20, choices=reservation_status, default="0") # 기본값을 0으로 주겠습니다
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    location = models.CharField("지역", max_length=50)
+    species = models.CharField("종/품종", max_length=30)
     photo = models.ImageField(blank=True) # 이미지
     reservation_start = models.DateField("예약시작일")
     reservation_end = models.DateField("예약종료일")

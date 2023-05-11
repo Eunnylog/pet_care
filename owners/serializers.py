@@ -20,9 +20,15 @@ class PetOwnerSerializer(serializers.ModelSerializer):
         
         
 class PetOwnerCreateSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source='writer.username')
     class Meta:
         model = PetOwner
-        fields = ("title","content", "charge","species","reservation_start", "reservation_end","location")
+        fields = ("title","content", "charge","species","reservation_start", "reservation_end","location", 'writer')
+        extra_kwargs = {
+            "writer":{
+                "write_only" : True,
+            }
+        }
 
     
 class PetOwnerCommentSerializer(serializers.ModelSerializer):
