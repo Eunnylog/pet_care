@@ -42,6 +42,9 @@ class UserManager(BaseUserManager):
         return user
 
 
+
+
+
 class User(AbstractBaseUser):
     username=models.CharField(max_length=50,unique=True)
     nick_name=models.CharField(max_length=50,default=True,null=True,blank=True)
@@ -54,8 +57,8 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
-    objects = UserManager()
     
+    objects = UserManager()
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
 
@@ -79,6 +82,15 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 
+class CheckEmail(models.Model):
+    email = models.EmailField(
+        verbose_name="email address",
+        max_length=255,
+        unique=True,
+    )
+    random_num=models.IntegerField()
+    try_num = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class PetOwnerReview(CommonModel):
@@ -86,6 +98,7 @@ class PetOwnerReview(CommonModel):
     owner = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'ownerreviews')
     content = models.TextField()
     star = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
+
 
 class PetSitterReview(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.SET_DEFAULT,default=1)

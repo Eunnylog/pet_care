@@ -1,7 +1,11 @@
 from rest_framework import serializers
-from users.models import PetOwnerReview, PetSitterReview
-from users.models import User
+from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
 from django.db.models import Avg
+
+class CheckEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckEmail
+        fields = "__all__"
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -94,7 +98,6 @@ class PetSitterReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetSitterReview
         fields = '__all__'
-
 
 class StarRatingSerializer(serializers.ModelSerializer):
     
