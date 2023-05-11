@@ -1,26 +1,58 @@
 import datetime
-from django.test import TestCase
 from django.utils import timezone
 
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from sitters.models import PetSitter
+from users.models import User
 
 # Create your tests here.
-# class QuestionModelTests(TestCase):
-        
-#         def test_reservation(self):
-#              #상황을 코드로 만들어줌
-#              #예약일이 과거일경우 false
-#              time = timezone.now() + datetime.timedelta(days=30)
-#              reservation_petsitter = PetSitter(reservation_start=time)
+class SitterCreateTest(APITestCase):
 
-#              #원하는 결과값이 나오는지 확인
-#              self.assertIs(reservation_petsitter.save(), False)
+    # def setUp(self):
+    #     self.user_data = {
+    #         'username': 'testuser',
+    #         'email': 'test@testuser.com',
+    #         'password': 'passtest'
+    #     }
+    #     self.sitter_data = {
+    #         "title":"날짜 테스트7",
+    #         "content":"날짜 테스트7",
+    #         "charge":"10000",
+    #         "species":1,
+    #         "location":1,
+    #         "reservation_start":"2023-05-12",
+    #         "reservation_end":"2023-05-18"
+    #     }
+    #     self.user = User.objects.create_user('testuser', 'test@testuser.com', 'passtest')
+    #     #왜 여긴
+    #     self.access_token = self.client.post(reverse("token_obtain_pair"), self.data).data['access']
 
-        # def save(self, **kwargs):
-        # if self.reservation_start < timezone.now():
-        #   raise ValidationError("예약시작일이 오늘보다 이전일 수 없습니다.")
-        # if self.reservation_end < self.reservation_start:
-        #     raise ValidationError('예약 종료일이 예약 시작일보다 이전일 수 없습니다.')
-        # else:    
-        #     self.reservation_period = (self.reservation_end - self.reservation_start) + timedelta(days=1)
-        #     super(CommonModel, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
+    @classmethod
+    def setUpTestData(cls):
+        cls.user_data = {
+            'username': 'testuser',
+            'email': 'test@testuser.com',
+            'password': 'passtest'
+        }
+        cls.sitter_data = {
+            "title":"날짜 테스트7",
+            "content":"날짜 테스트7",
+            "charge":"10000",
+            "species":1,
+            "location":1,
+            "reservation_start":"2023-05-12",
+            "reservation_end":"2023-05-18"
+        }
+        cls.user = User.objects.create_user('testuser', 'test@testuser.com', 'passtest')
+
+    def setUp(self):
+        self.access_token = self.client.post(reverse("token_obtain_pair"), self.data).data['access']
+
+    #로그인이 안된 유저가 post 시도할때 에러
+    def test_fail_if_not_logged_in(self):
+        url = reverse("PetSitterView")
+        response = self.client.post(url, self.sitter_data)
+        self.assertEqual(response.status_code, 401)

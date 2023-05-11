@@ -44,10 +44,10 @@ from users.models import User
 class UserRegistrationTest(APITestCase):
     def setUp(self):
         self.data = {
-                    'username': 'testuser',
-                    'email': 'test@testuser.com',
-                    'password': 'passtest'
-                     }
+            'username': 'testuser',
+            'email': 'test@testuser.com',
+            'password': 'passtest'
+        }
         self.user = User.objects.create_user('testuser', 'test@testuser.com', 'passtest')
 
     def test_login(self):
