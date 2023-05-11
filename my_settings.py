@@ -27,6 +27,8 @@ EMAIL = {
     'EMAIL_HOST'         : 'smtp.gmail.com',
     'EMAIL_HOST_USER'    : 'pjm970128@gmail.com',#pjm970128@gmail.com
     'EMAIL_HOST_PASSWORD': 'password', 
+    'EMAIL_HOST_USER'    : 'pjm970128@gmail.com',
+    'EMAIL_HOST_PASSWORD': 'password', 
     'SERVER_EMAIL'       : 'Gmail ID',
     'REDIRECT_PAGE'      : 'https://wave1994.tistory.com' 
 }
