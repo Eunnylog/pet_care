@@ -1,15 +1,9 @@
 from rest_framework import serializers
 from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR
-from django.utils import timezone
 
 
 class PetOwnerSerializer(serializers.ModelSerializer):
     writer = serializers.SerializerMethodField()
-<<<<<<< HEAD
-    
-    def get_writer(self, obj):
-        return obj.writer.username
-=======
     show_status = serializers.SerializerMethodField()
     is_reserved = serializers.SerializerMethodField()
     reservation_start = serializers.SerializerMethodField()
@@ -28,7 +22,6 @@ class PetOwnerSerializer(serializers.ModelSerializer):
             return 'hide'
         elif obj.show_status == '3':
             return 'delete'
->>>>>>> owner
     
     def get_is_reserved(self, obj):
         if obj.is_reserved == "0":
@@ -55,7 +48,7 @@ class PetOwnerSerializer(serializers.ModelSerializer):
         return obj.reservation_end.strftime("%Y년 %m월 %d일 %p %I:%M")
     
     def get_updated_at(self, obj):
-        return obj.reservation_end.strftime("%Y년 %m월 %d일 %p %I:%M")    
+        return obj.reservation_end.strftime("%Y년 %m월 %d일 %p %I:%M")
         
     class Meta:
         model = PetOwner
