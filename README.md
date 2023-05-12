@@ -44,4 +44,5 @@ CRUD
 Permissions, show_status
 Frontend와 연결할 때, SerializerMethodField()로 serializer 커스텀하여 어떤 항목 가져올지
 
-
+owner, sitter model의 location, species field를 FK에서 Charfield로 변경
+프론트에서 검색시 팝업으로 연관어 추천 구현 시도 예정
