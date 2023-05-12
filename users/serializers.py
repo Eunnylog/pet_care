@@ -1,14 +1,30 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
+from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview, CommonModel
 from django.db.models import Avg
-from owners.serializers import PetOwnerSerializer
+from owners.serializers import PetOwnerSerializer,BaseSerializer
 from sitters.serializers import PetSitterSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+    date_joined = serializers.SerializerMethodField()
+    
+    def get_date_joined(self, obj):
+        return obj.date_joined.strftime("%Y년 %m월 %d일 %p %I:%M")
+    
     class Meta:
         model = User
         fields = "__all__"
+        extra_kwargs = {
+            "password":{
+                "write_only":True,
+            },
+            "is_admin":{
+                "write_only":True,
+            },
+            "is_active":{
+                "write_only":True,
+            }
+        }
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -82,11 +98,15 @@ class PetOwnerReviewCreateSerializer(serializers.ModelSerializer):
         model = PetOwnerReview
         fields = ('content','star',)
 
-class PetOwnerReviewSerializer(serializers.ModelSerializer):
+class PetOwnerReviewSerializer(BaseSerializer):
     writer = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
 
     def get_writer(self, obj):
-        return obj.writer.username
+        return obj.owner.username
+    
+    def get_owner(self, obj):
+        return obj.owner.username
 
     class Meta:
         model = PetOwnerReview
@@ -97,7 +117,7 @@ class PetSitterReviewCreateSerializer(serializers.ModelSerializer):
         model = PetSitterReview
         fields = ('content','star',)
 
-class PetSitterReviewSerializer(serializers.ModelSerializer):
+class PetSitterReviewSerializer(BaseSerializer):
     writer = serializers.SerializerMethodField()
 
     def get_writer(self, obj):

@@ -11,7 +11,7 @@ class PetOwnerView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # 모든 게시글 불러오기
     def get(self, request):
-        owner_posts = PetOwner.objects.all() # 모든 게시글
+        owner_posts = PetOwner.objects.all().order_by('-created_at') # 모든 게시글
         serializer = PetOwnerSerializer(owner_posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -52,7 +52,7 @@ class PetOwnerDetailView(APIView):
     
     # 게시글 삭제하기
     def delete(self, request, owner_id):
-        owner_post = get_object_or_404(PetOwner, id=owner_id)
+        owner_post = get_object_or_404(PetOwner, id=owner_id, show_status='1')
         # 본인이 작성한 게시글이 맞다면
         if request.user == owner_post.writer:
             owner_post.show_status = '3'
@@ -69,7 +69,7 @@ class PetOwnerCommentView(APIView):
     def get(self, request, owner_id):
         """댓글 요청 함수"""
         owner_post = get_object_or_404(PetOwner, id=owner_id)
-        comments = owner_post.petownercomment_set.filter(show_status='1')
+        comments = owner_post.petownercomment_set.filter(show_status='1').order_by('-created_at')
         serializer = PetOwnerCommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

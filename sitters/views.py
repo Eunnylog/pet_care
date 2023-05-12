@@ -10,7 +10,7 @@ from sitters.serializers import PetSitterSerializer, PetSitterCreateSerializer, 
 class PetSitterView(APIView):
     # 게시글 가져오기
     def get(self, request):
-        sitters = PetSitter.objects.all()
+        sitters = PetSitter.objects.all().order_by('-created_at')
         serializer = PetSitterSerializer(sitters, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -48,7 +48,7 @@ class PetSitterDetailAPI(APIView):
         
     # 게시글 삭제하기
     def delete(self, request, sitter_id):
-        sitters = PetSitter.objects.get(id=sitter_id)
+        sitters = PetSitter.objects.get(id=sitter_id, show_status='1')
         if request.user == sitters.writer:  # 본인이 작성한 게시글이 맞다면
             sitters.delete()
             return Response({'message':'게시글이 삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
@@ -62,7 +62,7 @@ class PetSitterCommentView(APIView):
     def get(self, request, sitter_id):
         """댓글 요청 함수"""
         sitter_post = get_object_or_404(PetSitter, id=sitter_id)
-        comments = sitter_post.petownercomment_set.filter(show_status='1')
+        comments = sitter_post.petsittercomment_set.filter(show_status='1').order_by('-created_at')
         serializer = PetSitterCommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
