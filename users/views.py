@@ -14,6 +14,7 @@ from django.core.mail import EmailMessage
 
 import base64
 import random
+from threading import Timer
 
 def make64(sitename):
     sitename_bytes = sitename.encode('ascii')
@@ -91,6 +92,13 @@ class UserView(APIView):
             return Response({"message":f"패스워드가 다릅니다"}, status=status.HTTP_400_BAD_REQUEST)
     
 
+def timer_delete(*email_tuple):
+    email=''.join(email_tuple)
+    try:
+        email_list=CheckEmail.objects.get(email=email)
+        email_list.delete()
+    except:
+        pass
 #패스워드용 이메일확인
 class SendPasswordEmail(APIView):
     def post(self,request):
@@ -108,6 +116,8 @@ class SendPasswordEmail(APIView):
             email_list.email=email
         email_list.random_num=random_num
         email_list.save()
+        print(email)
+        Timer(86400,timer_delete,email).start()
         random_num=str(random_num)
         #이메일 보내기
         send_email = EmailMessage(subject,random_num,to=[email],)
