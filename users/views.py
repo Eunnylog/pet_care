@@ -40,7 +40,7 @@ class SendEmail(APIView):
 class SignUp(APIView):
     def post(self,request):
         if make64(request.data.get("email"))!=request.data.get("check_email"):
-            return Response({"message": f"이메일오류"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": f"이메일오류"}, status=status.HTTP_401_UNAUTHORIZED)
         serializer= UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -112,8 +112,9 @@ class SendPasswordEmail(APIView):
         #이메일 보내기
         send_email = EmailMessage(subject,random_num,to=[email],)
         send_email.send()
-        return Response({"message":"인증번호를 확인하세요"},status=status.HTTP_400_BAD_REQUEST)
-#
+        return Response({"message":"인증번호를 확인하세요"},status=status.HTTP__200)
+
+#비로그인 패스워드 바꾸기
 class ChangePassword(APIView):
     def post(self,request):
         email=request.data.get("email")
@@ -123,7 +124,10 @@ class ChangePassword(APIView):
             if check_email.random_num!=int(email_code):
                 check_email.try_num+=1
                 check_email.save()
-                return Response({"message":"인증번호를 확인하세요"},status=status.HTTP_400_BAD_REQUEST)
+                if check_email.try_num<=5:
+                    return Response({"message":f"${check_email.try_num}/5 인증번호를 확인하세요"},status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({"message":f"${check_email.try_num}/5 24시간 횟수초과"},status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response({"message":"이메일 인증이 안되었습니다"},status=status.HTTP_404_NOT_FOUND)
         user=get_object_or_404(User, email=email)

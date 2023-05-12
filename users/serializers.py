@@ -76,7 +76,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["nick_name"] = user.nick_name
         return token
 
-
 class PetOwnerReviewCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetOwnerReview
