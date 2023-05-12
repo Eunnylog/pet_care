@@ -10,8 +10,8 @@ from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, Pet
 class PetOwnerView(APIView):
     # 모든 게시글 불러오기
     def get(self, request):
-        owner_list = PetOwner.objects.all() # 모든 게시글
-        serializer = PetOwnerSerializer(owner_list, many=True)
+        owner_posts = PetOwner.objects.all() # 모든 게시글
+        serializer = PetOwnerSerializer(owner_posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 게시글 작성하기

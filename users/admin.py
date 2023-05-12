@@ -100,7 +100,6 @@ class CheckEmailAdmin(admin.ModelAdmin):
     list_display=('email','random_num','try_num','created_at')
     readonly_fields=('created_at',)
 
-
 class PetOwnerReviewDisplay(CommonDisplayAdmin):
     fields=('writer','owner','content','star')
     list_display=('writer','owner','content','star')

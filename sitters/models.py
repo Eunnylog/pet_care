@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from users.models import User, CommonModel
 from django.core.exceptions import ValidationError
+from owners.models import Location, Species
 
 
 class PetSitter(CommonModel):
@@ -27,7 +28,8 @@ class PetSitter(CommonModel):
     content = models.TextField() # 내용
     charge = models.PositiveIntegerField() # 요금
     is_reserved = models.CharField("진행상태", max_length=20, choices=reservation_status, default="0") # 기본값을 0으로 주겠습니다
-    species = models.CharField(max_length=20, choices=species) # 종
+    location = models.CharField("지역", max_length=50)
+    species = models.CharField("종/품종", max_length=30)
     photo = models.ImageField(blank=True) # 이미지
     reservation_start = models.DateField("예약시작일")
     reservation_end = models.DateField("예약종료일")
@@ -37,6 +39,7 @@ class PetSitter(CommonModel):
     def __str__(self):
         return self.title
 
+    # timezone.now()
     # 예약시작일과 현재날짜 비교
     # 예약 기간
     def save(self, **kwargs):
