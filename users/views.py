@@ -137,7 +137,7 @@ class PetOwnerReviewView(APIView):
     # 모든 후기 가져오기
     def get(self, request, user_id):
         owner = get_object_or_404(User,pk = user_id)
-        ownerreviews = owner.ownerreviews.filter(show_status='1')
+        ownerreviews = owner.ownerreviews.filter(show_status='1').order_by('-created_at')
         serializer = PetOwnerReviewSerializer(ownerreviews, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -191,7 +191,7 @@ class PetSitterReviewView(APIView):
     # 모든 후기 가져오기
     def get(self, request, user_id):
         sitter = get_object_or_404(User,pk = user_id)
-        sitterreviews = sitter.sitterreviews.filter(show_status='1')
+        sitterreviews = sitter.sitterreviews.filter(show_status='1').order_by('-created_at')
         serializer = PetSitterReviewSerializer(sitterreviews, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
