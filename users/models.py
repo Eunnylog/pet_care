@@ -42,9 +42,6 @@ class UserManager(BaseUserManager):
         return user
 
 
-
-
-
 class User(AbstractBaseUser):
     username=models.CharField(max_length=50,unique=True)
     nick_name=models.CharField(max_length=50,default=True,null=True,blank=True)
