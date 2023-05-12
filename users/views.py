@@ -40,7 +40,7 @@ class SendEmail(APIView):
 class SignUp(APIView):
     def post(self,request):
         if make64(request.data.get("email"))!=request.data.get("check_email"):
-            return Response({"message": f"이메일오류"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message": f"이메일오류"}, status=status.HTTP_400_BAD_REQUEST)
         serializer= UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
