@@ -53,7 +53,7 @@ class PetOwner(CommonModel):
         if self.reservation_end < self.reservation_start:
             raise ValidationError('예약 종료일이 예약 시작일보다 이전일 수 없습니다.')
         else:    
-            self.reservation_period = (self.reservation_end - self.reservation_start) + timedelta(days=1)
+            self.reservation_period = (self.reservation_end - self.reservation_start)
             super(CommonModel, self).save(**kwargs) # super의 첫번째 인자로 클래스명 , 객체 인스턴스가 들어갑니다
 
     # def get_absolute_url(self):
