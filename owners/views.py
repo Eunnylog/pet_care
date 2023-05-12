@@ -8,6 +8,7 @@ from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, Pet
 
 # 게시글 목록과 작성
 class PetOwnerView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # 모든 게시글 불러오기
     def get(self, request):
         owner_posts = PetOwner.objects.all() # 모든 게시글
@@ -16,9 +17,6 @@ class PetOwnerView(APIView):
     
     # 게시글 작성하기
     def post(self, request):
-        # 로그인을 하지 않은 사용자가 접근 시
-        if not request.user.is_authenticated:
-            return Response({'message': '로그인이 필요합니다.'}, status=status.HTTP_401_UNAUTHORIZED)
         serializer = PetOwnerCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(writer=request.user)
