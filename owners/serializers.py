@@ -24,11 +24,6 @@ class PetOwnerCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetOwner
         fields = ("title","content", "charge","species","reservation_start", "reservation_end","location", 'writer')
-        extra_kwargs = {
-            "writer":{
-                "write_only" : True,
-            }
-        }
 
     
 class PetOwnerCommentSerializer(serializers.ModelSerializer):
