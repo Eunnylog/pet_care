@@ -1,13 +1,9 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
 from django.db.models import Avg
 from owners.serializers import PetOwnerSerializer
 from sitters.serializers import PetSitterSerializer
-
-class CheckEmailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CheckEmail
-        fields = "__all__"
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -70,6 +66,16 @@ class UserDelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("is_active",)
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        token['email'] = user.email
+        token["nick_name"] = user.nick_name
+        return token
+
 
 class PetOwnerReviewCreateSerializer(serializers.ModelSerializer):
     class Meta:

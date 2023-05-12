@@ -15,7 +15,7 @@ urlpatterns = [
     path('<int:user_id>/',views.MyPageView.as_view(),name='mypage'),
     path('sendemail/',views.SendEmail.as_view(),name='send_email'),
 
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('sign/',views.UserView.as_view(),name='sign'),
 
