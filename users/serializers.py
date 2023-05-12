@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from users.models import PetOwnerReview, PetSitterReview
-from users.models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
 from django.db.models import Avg
 from owners.serializers import PetOwnerSerializer
 from sitters.serializers import PetSitterSerializer
@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("nick_name",)
+        fields = ("nick_name","photo",)
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -46,7 +46,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 class UserUpdatePasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("nick_name","password",)
+        fields = ("nick_name","password","photo",)
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -62,7 +62,19 @@ class UserUpdatePasswordSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class UserDelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("is_active",)
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        token['email'] = user.email
+        token["nick_name"] = user.nick_name
+        return token
 
 
 class PetOwnerReviewCreateSerializer(serializers.ModelSerializer):
@@ -94,7 +106,6 @@ class PetSitterReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetSitterReview
         fields = '__all__'
-
 
 class StarRatingSerializer(serializers.ModelSerializer):
     
@@ -129,4 +140,4 @@ class MyPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields = ('id','username','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set')
+        fields = ('id','username','nick_name','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set')

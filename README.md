@@ -1,7 +1,15 @@
 # pet_care
+작업 예정:<br/> 
+duration filed 삭제<br/> 
+owner post detail delete 진짜 삭제하지 않고 status값 바꾸기<br/> 
+이메일 인증 횟수 증가를 통한 제한걸기
+이메일 인증 시간 지나면 삭제
 <big>User</big>
 
 <dir>
+faker 모듈 설치<br/>
+pip freeze > requirements.txt<br/>
+
 setting<br/> 
 아래 두 명령어로 makemigrations, migrate후에 db모델에 csv파일 넣어주기
 python location_db.py<br/> 
@@ -28,11 +36,13 @@ python species_db.py<br/>
 <br/> 
 
 마지막 작업시 해야되는것: users.model의 user.nickname에unique값 지정하기
-작업 예정:owner post detail delete 진짜 삭제하지 않고 status값 바꾸기
 
 </dir>
 
-
+## Comment
+CRUD
+Permissions, show_status
 Frontend와 연결할 때, SerializerMethodField()로 serializer 커스텀하여 어떤 항목 가져올지
 
-
+owner, sitter model의 location, species field를 FK에서 Charfield로 변경
+프론트에서 검색시 팝업으로 연관어 추천 구현 시도 예정
