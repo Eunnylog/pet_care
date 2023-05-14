@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR
-from users.models import PetOwnerReview
+from users.models import PetOwnerReview, User
 
 
 
@@ -109,9 +109,31 @@ class PetOwnerCommentCreateSerializer(serializers.ModelSerializer):
         model = PetOwnerComment
         fields = ("content",)
 
+class UserDetailSerializer(serializers.ModelSerializer):
+    date_joined = serializers.SerializerMethodField()
+    
+    def get_date_joined(self, obj):
+        return obj.date_joined.strftime("%Y년 %m월 %d일 %p %I:%M")
+    
+    class Meta:
+        model = User
+        fields = "__all__"
+        extra_kwargs = {
+            "password":{
+                "write_only":True,
+            },
+            "is_admin":{
+                "write_only":True,
+            },
+            "is_active":{
+                "write_only":True,
+            }
+        }
+
+
 class SittersForOwnerPRSerializer(BaseSerializer):
     owner_post = serializers.SerializerMethodField()
-    sitter = serializers.SerializerMethodField()
+    sitter = UserDetailSerializer()
     
     def get_owner_post(self, obj):
         return obj.owner_post.title
