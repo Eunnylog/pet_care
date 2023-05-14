@@ -32,6 +32,7 @@ class PetOwnerSerializer(BaseSerializer):
     reservation_period = serializers.SerializerMethodField()
     
     
+    
     def get_writer(self, obj):
         return obj.writer.username
     
