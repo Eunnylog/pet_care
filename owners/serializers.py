@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR
+from users.models import PetOwnerReview
+
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -21,7 +23,20 @@ class BaseSerializer(serializers.ModelSerializer):
     def get_updated_at(self, obj):
         return obj.updated_at.strftime("%Y년 %m월 %d일 %p %I:%M")
     
- 
+
+class PetOwnerReviewSerializer(BaseSerializer):
+    writer = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
+
+    def get_writer(self, obj):
+        return obj.writer.username
+    
+    def get_owner(self, obj):
+        return obj.owner.username
+
+    class Meta:
+        model = PetOwnerReview
+        fields = '__all__'
         
         
 class PetOwnerSerializer(BaseSerializer):
@@ -30,8 +45,12 @@ class PetOwnerSerializer(BaseSerializer):
     reservation_start = serializers.SerializerMethodField()
     reservation_end = serializers.SerializerMethodField()
     reservation_period = serializers.SerializerMethodField()
-    
-    
+    ownerreviews = serializers.SerializerMethodField()
+
+    def get_ownerreviews(self, obj):
+        serializer = PetOwnerReviewSerializer(obj.writer.ownerreviews, many=True)
+        return serializer.data
+
     
     def get_writer(self, obj):
         return obj.writer.username
@@ -60,7 +79,7 @@ class PetOwnerSerializer(BaseSerializer):
         
     class Meta:
         model = PetOwner
-        fields = "__all__"
+        fields = ('writer','location','species','title','content','charge','is_reserved','photo','reservation_start','reservation_end','reservation_period','created_at','id','show_status','updated_at','ownerreviews')
         
         
 class PetOwnerCreateSerializer(serializers.ModelSerializer):
