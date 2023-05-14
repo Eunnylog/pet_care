@@ -1,7 +1,22 @@
 from rest_framework import serializers
 from sitters.models import PetSitterComment, PetSitter
 from owners.serializers import BaseSerializer
+from users.models import PetSitterReview
 
+
+class PetSitterReviewSerializer(BaseSerializer):
+    writer = serializers.SerializerMethodField()
+    sitter = serializers.SerializerMethodField()
+
+    def get_writer(self, obj):
+        return obj.writer.username
+        
+    def get_sitter(self, obj):
+        return obj.sitter.username
+    
+    class Meta:
+        model = PetSitterReview
+        fields = '__all__'
 
 class PetSitterSerializer(BaseSerializer):
     writer = serializers.SerializerMethodField()
@@ -9,7 +24,11 @@ class PetSitterSerializer(BaseSerializer):
     reservation_start = serializers.SerializerMethodField()
     reservation_end = serializers.SerializerMethodField()
     reservation_period = serializers.SerializerMethodField()
-    
+    sitterreviews = serializers.SerializerMethodField()
+
+    def get_sitterreviews(self, obj):
+        serializer = PetSitterReviewSerializer(obj.writer.sitterreviews, many=True)
+        return serializer.data
     
     def get_writer(self, obj):
         return obj.writer.username
@@ -38,7 +57,7 @@ class PetSitterSerializer(BaseSerializer):
     
     class Meta:
         model = PetSitter
-        fields = "__all__"
+        fields = ('writer','location','species','title','content','charge','is_reserved','photo','reservation_start','reservation_end','reservation_period','created_at','id','show_status','updated_at','sitterreviews')
 
 
 class PetSitterCreateSerializer(serializers.ModelSerializer):
