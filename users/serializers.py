@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview, CommonModel
 from django.db.models import Avg
-from owners.serializers import PetOwnerSerializer,BaseSerializer
+from owners.serializers import BaseSerializer
 from sitters.serializers import PetSitterSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -102,7 +102,7 @@ class PetOwnerReviewSerializer(BaseSerializer):
     owner = serializers.SerializerMethodField()
 
     def get_writer(self, obj):
-        return obj.owner.username
+        return obj.writer.username
     
     def get_owner(self, obj):
         return obj.owner.username
@@ -151,10 +151,10 @@ class MyPageSerializer(serializers.ModelSerializer):
     review_count = serializers.SerializerMethodField()
     ownerreviews = PetOwnerReviewSerializer(many= True)
     sitterreviews = PetSitterReviewSerializer(many=True)
-    petownerreview_set = PetOwnerReviewSerializer(many= True)
-    petsitterreview_set = PetSitterReviewSerializer(many= True)
-    petowner_set = PetOwnerSerializer(many=True)
-    petsitter_set = PetSitterSerializer(many = True)
+    # petownerreview_set = PetOwnerReviewSerializer(many= True)
+    # petsitterreview_set = PetSitterReviewSerializer(many= True)
+    # petowner_set = PetOwnerSerializer(many=True)
+    # petsitter_set = PetSitterSerializer(many = True)
 
     def get_star_rating(self, obj):
         avg = obj.ownerreviews.aggregate(Avg('star'))
@@ -165,4 +165,4 @@ class MyPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields = ('id','username','email','nick_name','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set','petownerreview_set','petsitterreview_set')
+        fields = ('id','username','email','nick_name','star_rating','review_count','ownerreviews','sitterreviews')
