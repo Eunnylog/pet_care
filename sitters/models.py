@@ -1,5 +1,5 @@
 from datetime import timedelta
-from datetime import datetime
+from django.utils import timezone
 from django.db import models
 from users.models import User, CommonModel
 from django.core.exceptions import ValidationError
@@ -31,8 +31,8 @@ class PetSitter(CommonModel):
     location = models.CharField("지역", max_length=50)
     species = models.CharField("종/품종", max_length=30)
     photo = models.ImageField(blank=True) # 이미지
-    reservation_start = models.DateField("예약시작일")
-    reservation_end = models.DateField("예약종료일")
+    reservation_start = models.DateTimeField("예약시작일")
+    reservation_end = models.DateTimeField("예약종료일")
     reservation_period = models.DurationField("예약기간")
     # location = models.PointField(blank=False, null=False) # 지역
 
@@ -43,8 +43,8 @@ class PetSitter(CommonModel):
     # 예약시작일과 현재날짜 비교
     # 예약 기간
     def save(self, **kwargs):
-        today=datetime.now()
-        if self.reservation_start < today.date():
+        today=timezone.now()
+        if self.reservation_start < today:
           raise ValidationError("예약시작일이 오늘보다 이전일 수 없습니다.")
         if self.reservation_end < self.reservation_start:
             raise ValidationError('예약 종료일이 예약 시작일보다 이전일 수 없습니다.')

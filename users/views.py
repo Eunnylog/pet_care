@@ -14,6 +14,7 @@ from django.core.mail import EmailMessage
 
 import base64
 import random
+from threading import Timer
 
 def make64(sitename):
     sitename_bytes = sitename.encode('ascii')
@@ -91,6 +92,13 @@ class UserView(APIView):
             return Response({"message":f"패스워드가 다릅니다"}, status=status.HTTP_400_BAD_REQUEST)
     
 
+def timer_delete(*email_tuple):
+    email=''.join(email_tuple)
+    try:
+        email_list=CheckEmail.objects.get(email=email)
+        email_list.delete()
+    except:
+        pass
 #패스워드용 이메일확인
 class SendPasswordEmail(APIView):
     def post(self,request):
@@ -108,12 +116,15 @@ class SendPasswordEmail(APIView):
             email_list.email=email
         email_list.random_num=random_num
         email_list.save()
+        print(email)
+        Timer(86400,timer_delete,email).start()
         random_num=str(random_num)
         #이메일 보내기
         send_email = EmailMessage(subject,random_num,to=[email],)
         send_email.send()
-        return Response({"message":"인증번호를 확인하세요"},status=status.HTTP_400_BAD_REQUEST)
-#
+        return Response({"message":"인증번호를 확인하세요"},status=status.HTTP_200_OK)
+
+#비로그인 패스워드 바꾸기
 class ChangePassword(APIView):
     def post(self,request):
         email=request.data.get("email")
@@ -123,7 +134,10 @@ class ChangePassword(APIView):
             if check_email.random_num!=int(email_code):
                 check_email.try_num+=1
                 check_email.save()
-                return Response({"message":"인증번호를 확인하세요"},status=status.HTTP_400_BAD_REQUEST)
+                if check_email.try_num<=5:
+                    return Response({"message":f"${check_email.try_num}/5 인증번호를 확인하세요"},status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({"message":f"${check_email.try_num}/5 24시간 횟수초과"},status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response({"message":"이메일 인증이 안되었습니다"},status=status.HTTP_404_NOT_FOUND)
         user=get_object_or_404(User, email=email)
@@ -137,7 +151,7 @@ class PetOwnerReviewView(APIView):
     # 모든 후기 가져오기
     def get(self, request, user_id):
         owner = get_object_or_404(User,pk = user_id)
-        ownerreviews = owner.ownerreviews.filter(show_status='1')
+        ownerreviews = owner.ownerreviews.filter(show_status='1').order_by('-created_at')
         serializer = PetOwnerReviewSerializer(ownerreviews, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -191,7 +205,7 @@ class PetSitterReviewView(APIView):
     # 모든 후기 가져오기
     def get(self, request, user_id):
         sitter = get_object_or_404(User,pk = user_id)
-        sitterreviews = sitter.sitterreviews.filter(show_status='1')
+        sitterreviews = sitter.sitterreviews.filter(show_status='1').order_by('-created_at')
         serializer = PetSitterReviewSerializer(sitterreviews, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

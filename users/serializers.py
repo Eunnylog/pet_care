@@ -1,14 +1,30 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview
+from users.models import User, CheckEmail, PetOwnerReview, PetSitterReview, CommonModel
 from django.db.models import Avg
-from owners.serializers import PetOwnerSerializer
+from owners.serializers import PetOwnerSerializer,BaseSerializer
 from sitters.serializers import PetSitterSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+    date_joined = serializers.SerializerMethodField()
+    
+    def get_date_joined(self, obj):
+        return obj.date_joined.strftime("%Y년 %m월 %d일 %p %I:%M")
+    
     class Meta:
         model = User
         fields = "__all__"
+        extra_kwargs = {
+            "password":{
+                "write_only":True,
+            },
+            "is_admin":{
+                "write_only":True,
+            },
+            "is_active":{
+                "write_only":True,
+            }
+        }
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -76,17 +92,20 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["nick_name"] = user.nick_name
         return token
 
-
 class PetOwnerReviewCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetOwnerReview
         fields = ('content','star',)
 
-class PetOwnerReviewSerializer(serializers.ModelSerializer):
+class PetOwnerReviewSerializer(BaseSerializer):
     writer = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
 
     def get_writer(self, obj):
-        return obj.writer.username
+        return obj.owner.username
+    
+    def get_owner(self, obj):
+        return obj.owner.username
 
     class Meta:
         model = PetOwnerReview
@@ -97,7 +116,7 @@ class PetSitterReviewCreateSerializer(serializers.ModelSerializer):
         model = PetSitterReview
         fields = ('content','star',)
 
-class PetSitterReviewSerializer(serializers.ModelSerializer):
+class PetSitterReviewSerializer(BaseSerializer):
     writer = serializers.SerializerMethodField()
 
     def get_writer(self, obj):
@@ -128,6 +147,8 @@ class MyPageSerializer(serializers.ModelSerializer):
     review_count = serializers.SerializerMethodField()
     ownerreviews = PetOwnerReviewSerializer(many= True)
     sitterreviews = PetSitterReviewSerializer(many=True)
+    petownerreview_set = PetOwnerReviewSerializer(many= True)
+    petsitterreview_set = PetSitterReviewSerializer(many= True)
     petowner_set = PetOwnerSerializer(many=True)
     petsitter_set = PetSitterSerializer(many = True)
 
@@ -140,4 +161,4 @@ class MyPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields = ('id','username','nick_name','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set')
+        fields = ('id','username','email','nick_name','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set','petownerreview_set','petsitterreview_set')
