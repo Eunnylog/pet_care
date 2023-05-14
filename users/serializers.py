@@ -106,7 +106,7 @@ class PetOwnerReviewSerializer(BaseSerializer):
     
     def get_owner(self, obj):
         return obj.owner.username
-
+    
     class Meta:
         model = PetOwnerReview
         fields = '__all__'
@@ -118,9 +118,13 @@ class PetSitterReviewCreateSerializer(serializers.ModelSerializer):
 
 class PetSitterReviewSerializer(BaseSerializer):
     writer = serializers.SerializerMethodField()
+    sitter = serializers.SerializerMethodField()
 
     def get_writer(self, obj):
         return obj.writer.username
+    
+    def get_sitter(self, obj):
+        return obj.sitter.username
 
     class Meta:
         model = PetSitterReview
