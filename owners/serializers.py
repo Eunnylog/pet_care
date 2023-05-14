@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR, Location
+from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR, Location, Species
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -108,5 +108,11 @@ class SittersForOwnerPRSerializer(BaseSerializer):
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
+        fields = "__all__"
+
+
+class SpeciesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Species
         fields = "__all__"
         

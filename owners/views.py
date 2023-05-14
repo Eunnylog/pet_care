@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response
-from owners.models import PetOwner, PetOwnerComment, SittersForOwnerPR, Location
-from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, PetOwnerCommentSerializer, PetOwnerCommentCreateSerializer, SittersForOwnerPRSerializer, LocationSerializer
+from owners.models import PetOwner, PetOwnerComment, SittersForOwnerPR, Location, Species
+from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, PetOwnerCommentSerializer, PetOwnerCommentCreateSerializer, SittersForOwnerPRSerializer, LocationSerializer, SpeciesSerializer
 
 
 # 게시글 목록과 작성
@@ -167,6 +167,7 @@ class SitterIsSelectedView(APIView):
         else:
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
 
+
 # 지역정보 View
 class LocationList(generics.ListAPIView):
     serializer_class = LocationSerializer
@@ -174,13 +175,31 @@ class LocationList(generics.ListAPIView):
     def get_queryset(self):
         queryset = Location.objects.all()
 
-        city_name = self.request.query_params.get('city_name', None)
-        if city_name is not None:
-            queryset = queryset.filter(city_name__icontains=city_name)
+        city = self.request.query_params.get('city', None)
+        if city is not None:
+            queryset = queryset.filter(city__icontains=city) # contains = 포함하는 문자열찾기 i가 붙으면 대소문자 구분 X
 
-        state_name = self.request.query_params.get('state_name', None)
-        if state_name is not None:
-            queryset = queryset.filter(state_name__icontains=state_name)
+        state = self.request.query_params.get('state', None)
+        if state is not None:
+            queryset = queryset.filter(state__icontains=state)
+
+        return queryset
+    
+    
+# 품종정보 View
+class SpeciesList(generics.ListAPIView):
+    serializer_class = SpeciesSerializer
+
+    def get_queryset(self):
+        queryset = Species.objects.all()
+
+        species = self.request.query_params.get('species', None)
+        if species is not None:
+            queryset = queryset.filter(species__icontains=species)
+
+        breeds = self.request.query_params.get('breeds', None)
+        if breeds is not None:
+            queryset = queryset.filter(breeds__icontains=breeds)
 
         return queryset
     
