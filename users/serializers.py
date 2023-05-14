@@ -151,6 +151,8 @@ class MyPageSerializer(serializers.ModelSerializer):
     review_count = serializers.SerializerMethodField()
     ownerreviews = PetOwnerReviewSerializer(many= True)
     sitterreviews = PetSitterReviewSerializer(many=True)
+    petownerreview_set = PetOwnerReviewSerializer(many= True)
+    petsitterreview_set = PetSitterReviewSerializer(many= True)
     petowner_set = PetOwnerSerializer(many=True)
     petsitter_set = PetSitterSerializer(many = True)
 
@@ -163,4 +165,4 @@ class MyPageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields = ('id','username','nick_name','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set')
+        fields = ('id','username','email','nick_name','star_rating','review_count','ownerreviews','sitterreviews','petowner_set','petsitter_set','petownerreview_set','petsitterreview_set')
