@@ -112,7 +112,7 @@ class SendPasswordEmail(APIView):
         #이메일 보내기
         send_email = EmailMessage(subject,random_num,to=[email],)
         send_email.send()
-        return Response({"message":"인증번호를 확인하세요"},status=status.HTTP__200)
+        return Response({"message":"인증번호를 확인하세요"},status=status.HTTP_200_OK)
 
 #비로그인 패스워드 바꾸기
 class ChangePassword(APIView):
