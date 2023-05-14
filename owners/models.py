@@ -66,7 +66,12 @@ class PetOwnerComment(CommonModel):
 
     def __str__(self):
         return str(self.content)
-
+    
+    def get_absolute_url(self):
+        return reverse('petowner_comment_view', kwargs={'owner_id': self.owner_post.pk})
+    
+    def get_detail_absolute_url(self):
+        return reverse('petowner_comment_detail_view', kwargs={'owner_id': self.owner_post.pk, 'comment_id':self.pk})
 
 class SittersForOwnerPR(CommonModel):
     owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
@@ -76,3 +81,5 @@ class SittersForOwnerPR(CommonModel):
     def __str__(self):
         return str(self.sitter)
     
+    def get_absolute_url(self):
+        return reverse('sittersforownerpr_view', kwargs={'owner_id': self.owner_post.pk})

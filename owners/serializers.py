@@ -85,11 +85,9 @@ class PetOwnerCommentSerializer(BaseSerializer):
 
 
 class PetOwnerCommentCreateSerializer(serializers.ModelSerializer):
-    writer = serializers.ReadOnlyField(source='writer.username')
-    owner_post = serializers.ReadOnlyField(source='owner_post.username')
     class Meta:
         model = PetOwnerComment
-        fields = "__all__"
+        fields = ('content',)
 
 class SittersForOwnerPRSerializer(BaseSerializer):
     owner_post = serializers.SerializerMethodField()
