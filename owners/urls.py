@@ -11,5 +11,4 @@ urlpatterns = [
     path('<int:owner_id>/reservation/<int:user_id>/', views.SitterIsSelectedView.as_view(), name='sitterisselectide_view'),
     path('location/', views.LocationList.as_view(), name='location_list_view'),
     path('species/', views.SpeciesList.as_view(), name='species_list_view'),
-
 ]

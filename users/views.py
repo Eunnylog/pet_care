@@ -22,6 +22,7 @@ def make64(sitename):
     sitename_base64_str = sitename_base64.decode('ascii')
     return sitename_base64_str
 
+
 #회원가입 이메일 확인
 class SendEmail(APIView):
     def post(self,request):
@@ -37,6 +38,7 @@ class SendEmail(APIView):
         email.send()
         return Response({"message":"이메일 확인하세요"},status=status.HTTP_200_OK)
 
+
 #회원가입
 class SignUp(APIView):
     def post(self,request):
@@ -49,9 +51,11 @@ class SignUp(APIView):
         else:
             return Response({"message": f"{serializer.errors}"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 #로그인
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
 
 #자신의 데이터
 class UserView(APIView):
@@ -83,7 +87,6 @@ class UserView(APIView):
         datas=request.data
         datas["is_active"]=False
         serializer = UserDelSerializer(user,data=datas)
-        print(serializer)
         if user.check_password(request.data.get("password")):
             if serializer.is_valid():
                 serializer.save()
@@ -99,6 +102,8 @@ def timer_delete(*email_tuple):
         email_list.delete()
     except:
         pass
+
+
 #패스워드용 이메일확인
 class SendPasswordEmail(APIView):
     def post(self,request):
@@ -116,13 +121,13 @@ class SendPasswordEmail(APIView):
             email_list.email=email
         email_list.random_num=random_num
         email_list.save()
-        print(email)
         Timer(86400,timer_delete,email).start()
         random_num=str(random_num)
         #이메일 보내기
         send_email = EmailMessage(subject,random_num,to=[email],)
         send_email.send()
         return Response({"message":"인증번호를 확인하세요"},status=status.HTTP_200_OK)
+
 
 #비로그인 패스워드 바꾸기
 class ChangePassword(APIView):
@@ -146,6 +151,7 @@ class ChangePassword(APIView):
             serializer.save()
         check_email.delete()
         return Response({"message":"패스워드가 변경되었습니다."},status=status.HTTP_200_OK)
+
 
 class PetOwnerReviewView(APIView):
     # 모든 후기 가져오기
@@ -187,7 +193,7 @@ class PetOwnerReviewDetailView(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'message': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
     
     # 후기 삭제하기
     def delete(self, request, user_id, review_id):
@@ -195,10 +201,9 @@ class PetOwnerReviewDetailView(APIView):
         if request.user == ownerreview.writer:
             ownerreview.show_status='3'
             ownerreview.save()
-            return Response({'mesage': '후기가 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
+            return Response({'message': '후기가 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
         else:
-            return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
-    
+            return Response({'message': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class PetSitterReviewView(APIView):
@@ -219,7 +224,7 @@ class PetSitterReviewView(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'message': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class PetSitterReviewDetailView(APIView):
@@ -241,7 +246,7 @@ class PetSitterReviewDetailView(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'message': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
     
     # 후기 삭제하기
     def delete(self, request, user_id, review_id):
@@ -249,10 +254,10 @@ class PetSitterReviewDetailView(APIView):
         if request.user == sitterreview.writer:
             sitterreview.show_status='3'
             sitterreview.save()
-            return Response({'mesage': '후기가 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
+            return Response({'message': '후기가 삭제되었습니다.'},status=status.HTTP_204_NO_CONTENT)
         else:
-            return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
-    
+            return Response({'message': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
+
 
 # 유저의 후기 평점
 class StarRatingView(APIView):
@@ -260,6 +265,7 @@ class StarRatingView(APIView):
         user = get_object_or_404(User, pk = user_id)
         serializer = StarRatingSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class MyPageView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -269,4 +275,5 @@ class MyPageView(APIView):
             serializer = MyPageSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({'mesage': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'message': '권한이 없습니다!'}, status=status.HTTP_403_FORBIDDEN)
+        

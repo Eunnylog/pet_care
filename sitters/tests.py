@@ -8,7 +8,7 @@ from rest_framework.test import APITestCase
 from sitters.models import PetSitter
 from users.models import User
 
-# Create your tests here.
+
 class SitterCreateTest(APITestCase):
 
     # def setUp(self):

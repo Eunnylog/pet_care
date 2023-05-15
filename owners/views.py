@@ -24,7 +24,6 @@ class PetOwnerView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    
 
 # 게시글 상세페이지 수정, 삭제    
 class PetOwnerDetailView(APIView):
@@ -138,6 +137,7 @@ class SittersForOwnerPRView(APIView):
                 reserved.save()
                 return Response("지원이 완료 되었습니다.", status=status.HTTP_200_OK)
 
+
 # 시터 선택, 취소
 class SitterIsSelectedView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -168,7 +168,7 @@ class SitterIsSelectedView(APIView):
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN)
 
 
-# 지역정보 View
+# 지역정보 API
 class LocationList(generics.ListAPIView):
     serializer_class = LocationSerializer
 
@@ -186,7 +186,7 @@ class LocationList(generics.ListAPIView):
         return queryset
     
     
-# 품종정보 View
+# 품종정보 API
 class SpeciesList(generics.ListAPIView):
     serializer_class = SpeciesSerializer
 

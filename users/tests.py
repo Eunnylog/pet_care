@@ -50,4 +50,3 @@ class LoginUserTest(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['username'], self.data['username'])
-
