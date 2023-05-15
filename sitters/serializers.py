@@ -25,6 +25,14 @@ class PetSitterSerializer(BaseSerializer):
     reservation_end = serializers.SerializerMethodField()
     reservation_period = serializers.SerializerMethodField()
     sitterreviews = serializers.SerializerMethodField()
+    reviews_count = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+
+    def get_reviews_count(self,obj):
+        return obj.writer.sitterreviews.count()
+    
+    def get_comments_count(self,obj):
+        return obj.petsittercomment_set.count()
 
     def get_sitterreviews(self, obj):
         serializer = PetSitterReviewSerializer(obj.writer.sitterreviews, many=True)
@@ -57,7 +65,7 @@ class PetSitterSerializer(BaseSerializer):
     
     class Meta:
         model = PetSitter
-        fields = ('writer','location','species','title','content','charge','is_reserved','photo','reservation_start','reservation_end','reservation_period','created_at','id','show_status','updated_at','sitterreviews')
+        fields = ('writer','location','species','title','content','charge','is_reserved','photo','reservation_start','reservation_end','reservation_period','created_at','id','show_status','updated_at','sitterreviews','reviews_count','comments_count')
 
 
 class PetSitterCreateSerializer(serializers.ModelSerializer):
