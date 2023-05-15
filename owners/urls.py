@@ -9,4 +9,7 @@ urlpatterns = [
     path('<int:owner_id>/comment/<int:comment_id>/', views.PetOwnerCommentDetailView.as_view(), name='petowner_comment_detail_view'),
     path('<int:owner_id>/reservation/', views.SittersForOwnerPRView.as_view(), name='sittersforownerpr_view'),
     path('<int:owner_id>/reservation/<int:user_id>/', views.SitterIsSelectedView.as_view(), name='sitterisselectide_view'),
+    path('location/', views.LocationList.as_view(), name='location_list_view'),
+    path('species/', views.SpeciesList.as_view(), name='species_list_view'),
+
 ]
