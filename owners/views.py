@@ -11,7 +11,7 @@ class PetOwnerView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # 모든 게시글 불러오기
     def get(self, request):
-        owner_posts = PetOwner.objects.all().order_by('-created_at') # 모든 게시글
+        owner_posts = PetOwner.objects.filter(show_status='1').order_by('-created_at') # 모든 게시글
         serializer = PetOwnerSerializer(owner_posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -31,13 +31,13 @@ class PetOwnerDetailView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # 게시글 상세보기
     def get(self, request, owner_id):
-        owner_post = get_object_or_404(PetOwner, id = owner_id)
+        owner_post = get_object_or_404(PetOwner, id = owner_id, show_status='1')
         serializer = PetOwnerSerializer(owner_post)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 게시글 수정하기
     def put(self, request, owner_id):
-        owner_post = get_object_or_404(PetOwner, id = owner_id)
+        owner_post = get_object_or_404(PetOwner, id = owner_id,show_status='1')
         # 본인이 작성한 게시글이 맞다면
         if request.user == owner_post.writer:
             serializer = PetOwnerCreateSerializer(owner_post, data=request.data)
