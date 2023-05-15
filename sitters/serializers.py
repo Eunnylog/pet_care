@@ -41,6 +41,7 @@ class PetSitterSerializer(BaseSerializer):
         model = PetSitter
         fields = ('writer','location','species','title','content','charge','photo','created_at','id','show_status','updated_at','sitterreviews','reviews_count','comments_count')
 
+
 class PetSitterCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PetSitter

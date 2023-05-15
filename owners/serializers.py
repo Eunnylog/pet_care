@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR
 from users.models import PetOwnerReview, User
-
+from owners.models import PetOwnerComment, PetOwner, SittersForOwnerPR, Location, Species
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -46,6 +45,14 @@ class PetOwnerSerializer(BaseSerializer):
     reservation_end = serializers.SerializerMethodField()
     reservation_period = serializers.SerializerMethodField()
     ownerreviews = serializers.SerializerMethodField()
+    reviews_count = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+
+    def get_reviews_count(self,obj):
+        return obj.writer.ownerreviews.count()
+    
+    def get_comments_count(self,obj):
+        return obj.petownercomment_set.count()
 
     def get_ownerreviews(self, obj):
         serializer = PetOwnerReviewSerializer(obj.writer.ownerreviews, many=True)
@@ -79,7 +86,8 @@ class PetOwnerSerializer(BaseSerializer):
         
     class Meta:
         model = PetOwner
-        fields = ('writer','location','species','title','content','charge','is_reserved','photo','reservation_start','reservation_end','reservation_period','created_at','id','show_status','updated_at','ownerreviews')
+        fields = ('writer','location','species','title','content','charge','is_reserved','photo','reservation_start','reservation_end','reservation_period','created_at','id','show_status','updated_at','ownerreviews','reviews_count'
+,'comments_count')
         
         
 class PetOwnerCreateSerializer(serializers.ModelSerializer):
@@ -101,6 +109,7 @@ class PetOwnerCommentSerializer(BaseSerializer):
     
     class Meta:
         model = PetOwnerComment
+
         fields = "__all__"
 
 
@@ -143,5 +152,17 @@ class SittersForOwnerPRSerializer(BaseSerializer):
     
     class Meta:
         model = SittersForOwnerPR
+        fields = "__all__"
+        
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = "__all__"
+
+
+class SpeciesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Species
         fields = "__all__"
         
