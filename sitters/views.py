@@ -10,7 +10,7 @@ from sitters.serializers import PetSitterSerializer, PetSitterCreateSerializer, 
 class PetSitterView(APIView):
     # 게시글 가져오기
     def get(self, request):
-        sitters = PetSitter.objects.all().order_by('-created_at')
+        sitters = PetSitter.objects.filter(status='1').order_by('-created_at')
         serializer = PetSitterSerializer(sitters, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -29,12 +29,12 @@ class PetSitterView(APIView):
 class PetSitterDetailAPI(APIView):
     # 게시글 상세보기
     def get(self, request, sitter_id):
-        sitters = PetSitter.objects.get(id=sitter_id)
+        sitters = PetSitter.objects.get(id=sitter_id, status='1')
         serializer = PetSitterSerializer(sitters)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 게시글 수정하기
-    def put(self, request, sitter_id):
+    def put(self, request, sitter_id, status='1'):
         sitters = PetSitter.objects.get(id=sitter_id)
         if request.user == sitters.writer:  # 본인이 작성한 게시글이 맞다면
             serializer = PetSitterCreateSerializer(sitters, data=request.data)
@@ -50,11 +50,11 @@ class PetSitterDetailAPI(APIView):
     def delete(self, request, sitter_id):
         sitters = PetSitter.objects.get(id=sitter_id, show_status='1')
         if request.user == sitters.writer:  # 본인이 작성한 게시글이 맞다면
-            sitters.delete()
+            sitters.show_status = '3'
+            sitters.save()
             return Response({'message':'게시글이 삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
         else:   # 본인의 게시글이 아니라면
             return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
-
 
 # 댓글 목록과 작성 
 class PetSitterCommentView(APIView):
