@@ -10,7 +10,7 @@ from sitters.serializers import PetSitterSerializer, PetSitterCreateSerializer, 
 class PetSitterView(APIView):
     # 게시글 가져오기
     def get(self, request):
-        sitters = PetSitter.objects.filter(status='1').order_by('-created_at')
+        sitters = PetSitter.objects.filter(show_status='1').order_by('-created_at')
         serializer = PetSitterSerializer(sitters, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -29,12 +29,12 @@ class PetSitterView(APIView):
 class PetSitterDetailAPI(APIView):
     # 게시글 상세보기
     def get(self, request, sitter_id):
-        sitters = PetSitter.objects.get(id=sitter_id, status='1')
+        sitters = PetSitter.objects.get(id=sitter_id, show_status='1')
         serializer = PetSitterSerializer(sitters)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # 게시글 수정하기
-    def put(self, request, sitter_id, status='1'):
+    def put(self, request, sitter_id):
         sitters = PetSitter.objects.get(id=sitter_id)
         if request.user == sitters.writer:  # 본인이 작성한 게시글이 맞다면
             serializer = PetSitterCreateSerializer(sitters, data=request.data)
