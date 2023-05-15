@@ -5,9 +5,8 @@ from sitters.models import PetSitter, PetSitterComment
 
 
 class PetSitterDisplay(CommonDisplayAdmin):
-    list_display = ('writer','title','content','charge','species','is_reserved','photo','reservation_start','reservation_end','reservation_period','location')
-    fields = ('writer','title','content','charge','species','is_reserved','photo','reservation_start','reservation_end','reservation_period','location')
-    readonly_fields = ('reservation_period',)
+    list_display = ('writer','title','content','charge','species','photo','location')
+    fields = ('writer','title','content','charge','species','photo','location')
 
 
 
