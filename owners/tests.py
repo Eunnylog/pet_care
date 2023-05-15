@@ -377,7 +377,7 @@ class OwnerPostCommentDeleteTest(APITestCase):
 # ======================================================== 예약하기 테스트 시작 ========================================================
 
 # 시터가 오너의 게시글에 예약하기
-class SissterTest(APITestCase):
+class SitterTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user_data = {"username": "test1","email":"test1@test.com", "password":"1234"} # 글작성자

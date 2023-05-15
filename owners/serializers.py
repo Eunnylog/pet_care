@@ -82,7 +82,7 @@ class PetOwnerCommentSerializer(BaseSerializer):
     
     class Meta:
         model = PetOwnerComment
-        fields = ("writer", "owner_post", "content")
+        fields = "__all__"
 
 
 class PetOwnerCommentCreateSerializer(serializers.ModelSerializer):
