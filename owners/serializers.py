@@ -49,10 +49,10 @@ class PetOwnerSerializer(BaseSerializer):
     comments_count = serializers.SerializerMethodField()
 
     def get_reviews_count(self,obj):
-        return obj.writer.ownerreviews.count()
+        return obj.writer.ownerreviews.filter(show_status='1').count()
     
     def get_comments_count(self,obj):
-        return obj.petownercomment_set.count()
+        return obj.petownercomment_set.filter(show_status='1').count()
 
     def get_ownerreviews(self, obj):
         serializer = PetOwnerReviewSerializer(obj.writer.ownerreviews, many=True)
