@@ -11,7 +11,7 @@ Pet Care에서는 당신과 반려동물을 위한 편리하고 안전한 돌봄
 우리의 소중한 반려동물을 위한 서비스, Pet Care와 함께 하세요.
 <br/>
 
-![petcare](https://github.com/nueeng/pet_care/assets/127704498/a10cb810-539c-4ba9-bd78-5dddb800843b)
+![petcare](https://github.com/jmpop97/pet_care/assets/127704498/efdd599f-e8eb-4f8d-9eee-ce7e616cd8db)
 
 ![Frontend Github](https://github.com/nueeng/pet_care_frontend)
 
