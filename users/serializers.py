@@ -157,11 +157,14 @@ class MyPageSerializer(serializers.ModelSerializer):
     # petsitter_set = PetSitterSerializer(many = True)
 
     def get_star_rating(self, obj):
-        avg = obj.ownerreviews.aggregate(Avg('star'))
-        return avg['star__avg']
+        owner_star = obj.ownerreviews.aggregate(Avg('star'))
+        sitter_star = obj.sitterreviews.aggregate(Avg('star'))
+        avg = (owner_star['star__avg']+sitter_star['star__avg'])/2
+        return avg
     
     def get_review_count(self, obj):
-        return obj.ownerreviews.count()
+        all_review = obj.ownerreviews.count()+obj.sitterreviews.count()
+        return all_review
 
     class Meta:
         model=User
