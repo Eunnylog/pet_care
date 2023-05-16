@@ -4,6 +4,7 @@ from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from owners.models import PetOwner, PetOwnerComment, SittersForOwnerPR, Location, Species
 from owners.serializers import PetOwnerSerializer, PetOwnerCreateSerializer, PetOwnerCommentSerializer, PetOwnerCommentCreateSerializer, SittersForOwnerPRSerializer, LocationSerializer, SpeciesSerializer
+from django.db.models import Q
 
 
 # 게시글 목록과 작성
@@ -175,14 +176,21 @@ class LocationList(generics.ListAPIView):
     def get_queryset(self):
         queryset = Location.objects.all()
 
-        city = self.request.query_params.get('city', None)
-        if city is not None:
-            queryset = queryset.filter(city__icontains=city) # contains = 포함하는 문자열찾기 i가 붙으면 대소문자 구분 X
-
-        state = self.request.query_params.get('state', None)
-        if state is not None:
-            queryset = queryset.filter(state__icontains=state)
-
+        locationsearch = self.request.query_params.get('locationsearch', None)
+        # city or state
+        if locationsearch is not None:
+            if " " in locationsearch:
+                locationsearch.split(" ")
+                city = locationsearch.split(" ")[0]
+                state = locationsearch.split(" ")[1]
+                queryset = queryset.filter(Q(city__icontains=city)&
+                                        Q(state__icontains=state)
+                                        ).distinct()
+            else:
+                queryset = queryset.filter(Q(city__icontains=locationsearch)|
+                                        Q(state__icontains=locationsearch)
+                                        ).distinct()
+            
         return queryset
     
     
@@ -193,13 +201,20 @@ class SpeciesList(generics.ListAPIView):
     def get_queryset(self):
         queryset = Species.objects.all()
 
-        species = self.request.query_params.get('species', None)
-        if species is not None:
-            queryset = queryset.filter(species__icontains=species)
-
-        breeds = self.request.query_params.get('breeds', None)
-        if breeds is not None:
-            queryset = queryset.filter(breeds__icontains=breeds)
-
+        speciessearch = self.request.query_params.get('speciessearch', None)
+        # species or breeds
+        if speciessearch is not None:
+            if " " in speciessearch:
+                speciessearch.split(" ")
+                species = speciessearch.split(" ")[0]
+                breeds = speciessearch.split(" ")[1]
+                queryset = queryset.filter(Q(species__icontains=species)&
+                                        Q(breeds__icontains=breeds)
+                                        ).distinct()
+            else:
+                queryset = queryset.filter(Q(species__icontains=speciessearch)|
+                                        Q(breeds__icontains=speciessearch)
+                                        ).distinct()
+            
         return queryset
     
