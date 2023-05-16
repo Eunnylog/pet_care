@@ -377,52 +377,52 @@ class OwnerPostCommentDeleteTest(APITestCase):
 # ======================================================== 예약하기 테스트 시작 ========================================================
 
 # 시터가 오너의 게시글에 예약하기
-# class SitterTest(APITestCase):
-#     @classmethod
-#     def setUpTestData(cls):
-#         cls.user_data = {"username": "test1","email":"test1@test.com", "password":"1234"} # 글작성자
-#         cls.user2_data = {"username": "test2","email":"test2@test.com", "password":"1234"} # 글지원자
-#         cls.owner_post_data = {
-#             "title": "테스트 게시글",
-#             "content": "테스트 합니다",
-#             "location": 1,
-#             "charge": "5000",
-#             "species": 1,
-#             "reservation_start": timezone.now()+timedelta(days=1),
-#             "reservation_end": timezone.now()+ timedelta(days=20)
-#         }
-#         cls.user = User.objects.create_user("test1","test1@test.com","1234")
-#         cls.user2 = User.objects.create_user("test2","test2@test.com","1234")
-#         cls.owner_post = PetOwner.objects.create(   # 외래키 필드 값을 생성해주기 위해
-#             writer= cls.user,
-#             **cls.owner_post_data
-#         )
-#         cls.sitter_pr_data = {
-#             "sitter": cls.user2,
-#             "owner_post": cls.owner_post,
-#             "is_selected": False
-#         }
+class SitterTest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user_data = {"username": "test1","email":"test1@test.com", "password":"1234"} # 글작성자
+        cls.user2_data = {"username": "test2","email":"test2@test.com", "password":"1234"} # 글지원자
+        cls.owner_post_data = {
+            "title": "테스트 게시글",
+            "content": "테스트 합니다",
+            "location": 1,
+            "charge": "5000",
+            "species": 1,
+            "reservation_start": timezone.now()+timedelta(days=1),
+            "reservation_end": timezone.now()+ timedelta(days=20)
+        }
+        cls.user = User.objects.create_user("test1","test1@test.com","1234")
+        cls.user2 = User.objects.create_user("test2","test2@test.com","1234")
+        cls.owner_post = PetOwner.objects.create(   # 외래키 필드 값을 생성해주기 위해
+            writer= cls.user,
+            **cls.owner_post_data
+        )
+        cls.sitter_pr_data = {
+            "sitter": cls.user2,
+            "owner_post": cls.owner_post,
+            "is_selected": False
+        }
 
         
-#     def setUp(self):
-#         self.access_token = self.client.post(reverse('token_obtain_pair'), self.user_data).data['access']
-#         self.access_token2 = self.client.post(reverse('token_obtain_pair'), self.user2_data).data['access']
-#         self.sitter_pr = SittersForOwnerPR.objects.create(**self.sitter_pr_data)
+    def setUp(self):
+        self.access_token = self.client.post(reverse('token_obtain_pair'), self.user_data).data['access']
+        self.access_token2 = self.client.post(reverse('token_obtain_pair'), self.user2_data).data['access']
+        self.sitter_pr = SittersForOwnerPR.objects.create(**self.sitter_pr_data)
     
     
-#     # 로그인하지 않은 유저 접근 시 에러 작동 확인    
-#     def test_fail_if_not_logged_int(self):
-#         serializer = SittersForOwnerPRSerializer(self.sitter_pr)
-#         url = reverse('sittersforownerpr_view', kwargs={"owner_id": self.owner_post.pk})
-#         response = self.client.post(url, serializer.data)
-#         self.assertEqual(response.status_code, 401)
+    # 로그인하지 않은 유저 접근 시 에러 작동 확인    
+    def test_fail_if_not_logged_int(self):
+        serializer = SittersForOwnerPRSerializer(self.sitter_pr)
+        url = reverse('sittersforownerpr_view', kwargs={"owner_id": self.owner_post.pk})
+        response = self.client.post(url, serializer.data)
+        self.assertEqual(response.status_code, 401)
     
-#     # 예약하기 테스트
-#     def test_pr_for_owner_post(self):
-#         data = {'sitter':self.user2.id}
-#         response = self.client.post(
-#             path = reverse('sittersforownerpr_view',kwargs={"owner_id": self.owner_post.pk}),
-#             data = data,
-#             HTTP_AUTHORIZATION = f"Bearer {self.access_token2}"
-#         )
-#         self.assertEqual(response.status_code, 200)
+    # 예약하기 테스트
+    def test_pr_for_owner_post(self):
+        data = {'sitter':self.user2.id}
+        response = self.client.post(
+            path = reverse('sittersforownerpr_view',kwargs={"owner_id": self.owner_post.pk}),
+            data = data,
+            HTTP_AUTHORIZATION = f"Bearer {self.access_token2}"
+        )
+        self.assertEqual(response.status_code, 200)
