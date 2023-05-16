@@ -17,7 +17,6 @@ urlpatterns = [
 
     path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('sign/',views.UserView.as_view(),name='sign'),
 
     path('<int:user_id>/owner-review/', views.PetOwnerReviewView.as_view(),name='petownerreview_view'),
     path('<int:user_id>/sitter-review/', views.PetSitterReviewView.as_view(),name='petsitterreview_view'),

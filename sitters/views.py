@@ -56,6 +56,7 @@ class PetSitterDetailAPI(APIView):
         else:   # 본인의 게시글이 아니라면
             return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
 
+
 # 댓글 목록과 작성 
 class PetSitterCommentView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -74,6 +75,7 @@ class PetSitterCommentView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # 댓글 수정, 삭제
 class PetSitterCommentDetailView(APIView):

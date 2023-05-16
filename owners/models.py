@@ -59,6 +59,7 @@ class PetOwner(CommonModel):
     def get_absolute_url(self):
         return reverse('petowner_detail_View', kwargs={'owner_id':self.pk})
 
+
 class PetOwnerComment(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
@@ -73,6 +74,7 @@ class PetOwnerComment(CommonModel):
     def get_detail_absolute_url(self):
         return reverse('petowner_comment_detail_view', kwargs={'owner_id': self.owner_post.pk, 'comment_id':self.pk})
 
+
 class SittersForOwnerPR(CommonModel):
     owner_post = models.ForeignKey(PetOwner, on_delete=models.CASCADE)
     sitter = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -83,3 +85,4 @@ class SittersForOwnerPR(CommonModel):
     
     def get_absolute_url(self):
         return reverse('sittersforownerpr_view', kwargs={'owner_id': self.owner_post.pk})
+    

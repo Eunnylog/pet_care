@@ -13,7 +13,7 @@ Pet Care에서는 당신과 반려동물을 위한 편리하고 안전한 돌봄
 
 ![petcare](https://github.com/jmpop97/pet_care/assets/127704498/efdd599f-e8eb-4f8d-9eee-ce7e616cd8db)
 
-![Frontend Github](https://github.com/nueeng/pet_care_frontend)
+[Frontend Github](https://github.com/nueeng/pet_care_frontend)
 
 ## 📚 Stacks
 
@@ -28,6 +28,44 @@ Pet Care에서는 당신과 반려동물을 위한 편리하고 안전한 돌봄
 `python manage.py makemigrations`, `python manage.py migrate`로 모델 생성 후
 <br/>
 `python location_db.py`, `python species_db.py`를 실행하여 검색어 지역과 종 DB를 csv로 넣어주세요.
+
+<br/>
+
+루트폴더에 다음과 같은 my_settings.py 파일이 필요합니다
+```python
+DATABASES = {
+    'default' : {
+        'ENGINE'  : 'django.db.backends.mysql',
+        'NAME'    : 'Scheme Name',
+        'USER'    : 'User Name',
+        'PASSWORD': 'Your Password',
+        'HOST'    : 'localhost',
+        'PORT'    : 'Database Server Port',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset'     : 'utf8mb4',
+            'use_unicode' : True,
+        },
+    }
+}
+
+SECRET_KEY = {
+    'secret'   :'django secret key를 생성해서 넣어주세요',
+    'algorithm':'HS256' 
+}
+
+
+EMAIL = {
+    'EMAIL_BACKEND'      :'django.core.mail.backends.smtp.EmailBackend', 
+    'EMAIL_USE_TLS'      : True,      
+    'EMAIL_PORT'         : 587,                   
+    'EMAIL_HOST'         : 'smtp.gmail.com',
+    'EMAIL_HOST_USER'    : '호스트 이메일 주소',
+    'EMAIL_HOST_PASSWORD': 'gmail 2단계 인증 비밀번호', 
+    'SERVER_EMAIL'       : 'Gmail ID',
+    'REDIRECT_PAGE'      : 'https://mail.google.com/'
+}
+```
 
 ## 💡 Features
 

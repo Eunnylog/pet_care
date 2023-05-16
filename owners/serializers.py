@@ -118,6 +118,7 @@ class PetOwnerCommentCreateSerializer(serializers.ModelSerializer):
         model = PetOwnerComment
         fields = ('content',)
 
+
 class UserDetailSerializer(serializers.ModelSerializer):
     date_joined = serializers.SerializerMethodField()
     

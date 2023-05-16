@@ -19,7 +19,6 @@ class PetSitter(CommonModel):
         return self.title
 
 
-
 class PetSitterComment(CommonModel):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     sitter_post = models.ForeignKey(PetSitter, on_delete=models.CASCADE)

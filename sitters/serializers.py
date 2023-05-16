@@ -18,6 +18,7 @@ class PetSitterReviewSerializer(BaseSerializer):
         model = PetSitterReview
         fields = '__all__'
 
+
 class PetSitterSerializer(BaseSerializer):
     writer = serializers.SerializerMethodField()
     sitterreviews = serializers.SerializerMethodField()
